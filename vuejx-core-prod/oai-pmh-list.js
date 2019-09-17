@@ -40,9 +40,11 @@ export async function * getOaiListItems (oaiPmh, verb, field, options) {
     yield initialResult[field]
   }
   
-  let resumptionToken = getResumptionToken(initialParsedResponse, initialResult[field].length)
+  let resumptionToken = undefined;
+  if (initialResult[field] !== undefined) {
+    resumptionToken = getResumptionToken(initialParsedResponse, initialResult[field].length)
+  }
   console.log('resumptionToken', resumptionToken);
-  
   while (resumptionToken !== undefined) {
     const response = await oaiPmh.request({
       url: oaiPmh.baseUrl,
@@ -53,7 +55,10 @@ export async function * getOaiListItems (oaiPmh, verb, field, options) {
     })
     initialParsedResponse = await parseOaiPmhXml(response.body)
     if (initialParsedResponse[verb] !== null && initialParsedResponse[verb] !== undefined && Array.isArray(initialParsedResponse[verb][field])) {
-      resumptionToken = getResumptionToken(initialParsedResponse, initialParsedResponse[verb][field].length)
+      resumptionToken = undefined;
+      if (initialParsedResponse[verb] !== undefined && initialParsedResponse[verb][field] !== undefined) {
+        resumptionToken = getResumptionToken(initialParsedResponse, initialParsedResponse[verb][field].length)
+      }
       console.log('resumptionToken next', resumptionToken);
       for await (const item of initialParsedResponse[verb][field]) {
         yield item
