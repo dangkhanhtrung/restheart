@@ -51,6 +51,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var httpRequest_1 = require("./httpRequest");
 var config_1 = require("../config");
 var elasticsearch_1 = require("../boostrap/elasticsearch");
+var constant_1 = require("../constant");
 var arrays_1 = require("../utils/arrays");
 var permission_es_1 = require("../utils/permission_es");
 var reindex_1 = require("../utils/reindex");
@@ -495,7 +496,7 @@ var vuejxMutationControl = /** @class */ (function (_super) {
                     case 7:
                         removeById = _a.sent();
                         if (removeById['result']['ok'] > 0) {
-                            reindex_1.reindex(db, collection, elasticsearch_1.elasticClient, user, new Date().getTime() + '');
+                            elasticsearch_1.deleteDocument(elasticsearch_1.elasticClient, db + '___' + collection, constant_1._TYPE, String(id) + '');
                             return [2 /*return*/, {
                                     statusCode: 200
                                 }];
@@ -550,7 +551,7 @@ var vuejxMutationControl = /** @class */ (function (_super) {
                     case 7:
                         removeById = _a.sent();
                         if (removeById['result']['ok'] > 0) {
-                            reindex_1.reindex(db, collection, elasticsearch_1.elasticClient, user, new Date().getTime() + '');
+                            elasticsearch_1.deleteDocument(elasticsearch_1.elasticClient, db + '___' + collection, constant_1._TYPE, String(detail[0]['_id']) + '');
                             return [2 /*return*/, {
                                     statusCode: 200
                                 }];
@@ -573,7 +574,7 @@ var vuejxMutationControl = /** @class */ (function (_super) {
     };
     vuejxMutationControl.prototype.removeMany = function (token, db, collection, filter) {
         return __awaiter(this, void 0, void 0, function () {
-            var user, detail, error, errorCount, key, errorES, removeMany, e_8;
+            var user, detail, error, errorCount, key, errorES, removeMany, key, e_8;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.defaultBody(token, {}, collection, false)];
@@ -620,7 +621,11 @@ var vuejxMutationControl = /** @class */ (function (_super) {
                     case 10:
                         removeMany = _a.sent();
                         if (removeMany['result']['ok'] > 0) {
-                            reindex_1.reindex(db, collection, elasticsearch_1.elasticClient, user, new Date().getTime() + '');
+                            for (key = 0; key < 1000; key++) {
+                                if (detail[key] !== undefined && detail[key] !== null) {
+                                    elasticsearch_1.deleteDocument(elasticsearch_1.elasticClient, db + '___' + collection, constant_1._TYPE, String(detail[key]['_id']) + '');
+                                }
+                            }
                             return [2 /*return*/, {
                                     statusCode: 200
                                 }];
