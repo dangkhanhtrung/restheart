@@ -1,0 +1,228 @@
+body .v-toolbar {
+    box-shadow: 0 0px 4px -1px rgba(0,0,0,.2), 0 0 0px 0 rgba(0,0,0,.14), 0 0px 0px 0 rgba(0,0,0,.12);
+    width: 100%;
+}
+body .v-toolbar__content .v-btn.v-btn--icon.v-size--default,
+body .v-toolbar__extension .v-btn.v-btn--icon.v-size--default {
+    height: 42px;
+    width: 42px;
+}
+body .v-badge__badge {
+    border-radius: 4px;
+    right: -8px;
+    top: -8px;
+    font-size: 11px;
+    height: 16px;
+}
+body .v-label,
+body .v-list-item__title {
+    font-size: 14px;
+}
+body .v-list {
+    padding: 0;
+}
+body .v-list-item {
+    min-height: 32px;
+}
+body .v-list-item__content {
+    padding: 8px 0;
+}
+@media (min-width:1264px){
+    .admin_state .container{max-width: unset;}
+}
+body .v-banner.px-0 .v-banner__wrapper {
+    padding: 6px;
+}
+body .v-btn {
+    border-radius: 0;
+}
+body .v-sheet > .layout:first-child {
+    padding-top: 8px;
+}
+body .v-sheet > .layout:last-child {
+    padding-bottom: 8px;
+}
+body .v-sheet .layout > .flex{
+    padding: 0 8px;
+}
+body .v__border .v-input__slot {
+    border: 1px solid gainsboro;
+}
+body .v__border_number {
+    border: 1px solid gainsboro;
+    height: 34px;
+    border-radius: 0;
+}
+body .v__border_number .v-input__control,
+body .v__border_number .v-input__slot {
+    min-height: 32px;
+    margin: 0;
+}
+body .v__border_number .v-input__icon--append,
+body .v__border_number .v-input__icon--append-outer,
+body .v__border_number .v-input__icon--append:hover i,
+body .v__border_number .v-input__icon--append-outer:hover i  {
+    cursor: pointer;
+    color: #098670;
+}
+body .v__border_number .v-input__append-outer {
+    margin: 7px 6px !important;
+}
+body .v__border_number .v-icon {
+    font-size: 20px;
+}
+body .v__border_number .v-input__icon--append-outer {
+    margin-top: -2px;
+}
+body .v-text-field.v-text-field--enclosed .v-text-field__details {
+    margin-bottom: 0px;
+    padding: 0 2px;
+}
+body .v-text-field__details,
+body .v-messages{
+    min-height: 0px;
+}
+body .filter__repositories .v-text-field__details,
+body .filter__repositories_type .v-text-field__details {
+    display: none;
+}
+body .v__border.v-input .v-input__slot {
+    box-shadow: none !important;
+    border-radius: 0 !important;
+}
+body .v__border.v-input .v-input__control {
+    min-height: 32px;
+}
+body .v-subheader {
+    height: 32px;
+    padding: 0 2px;
+    font-size: 14px;
+    color: inherit !important;
+}
+.required__class {
+    color: red;
+    font-weight: bold;
+    margin-left: 4px;
+}
+body .v-banner .v-toolbar__title {
+    font-size: 18px;
+    line-height: 36px;
+}
+body .e-gridcontent .e-content .e-table tr:last-child td {
+    border-bottom: 0;
+}
+body .v-select-list .v-list-item {
+    border-bottom: 1px dashed #e3e3e3;
+}
+body .v-select-list .v-list-item:last-child {
+    border-bottom: 0
+}
+body .v-application--is-ltr .v-list-item__action:first-child, 
+body .v-application--is-ltr .v-list-item__icon:first-child {
+    margin-right: 8px;
+}
+body .v-list-item__action {
+    margin: 4px 0;
+}
+
+body .v-text-field--solo>.v-input__control>.v-input__slot {
+    box-shadow: none !important;
+}
+body .CodeMirror-sizer,
+body .CodeMirror-gutters,
+body .vue-codemirror {
+    z-index: 0;
+}
+body button, body input, body optgroup, body select, body textarea {
+    font-size: 14px;
+}
+body .v__border.v-textarea textarea {
+    margin-top: 0px !important;
+}
+body .v-chip.v-size--small,
+body .v-chip--label {
+    border-radius: 0 !important;
+}
+
+body .hd__screen > div {
+    max-width: 1366px !important;
+    margin: 0 auto;
+    padding: 0;
+  }
+
+body .vuejx__header .v-chip.v-size--default {
+    border-radius: 0;
+    height: 42px;
+    margin: 0;
+    padding: 0 16px;
+    font-weight: 500;
+  }
+  body .vuejx__header .v-chip-group .v-slide-group__content {
+    padding: 0;
+  }
+  body .v-select-list .v-icon.v-icon {
+    font-size: 18px;
+    margin-top: -2px;
+  }
+  body .v-select-list .v-input--selection-controls__ripple {
+    left: -7px;
+    top: calc(50% - 16px);
+    height: 18px;
+    width: 18px;
+  }
+  body .fade-transition-leave-to {
+    display: none !important;
+  }
+  body .v-tabs-bar {
+    border-radius: 0 !important;
+}
+body .v-btn {
+    height: 32px !important;
+}
+
+
+body .employee__table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.chart__table__preview table, .chart__table__preview td, .chart__table__preview th {
+    padding: 8px 10px!important;
+    border: 1px solid #dcdcdc!important;
+    color: #000;
+}
+body .v-text-field.v-text-field--solo .v-input__control {
+    min-height: 32px;
+}
+body .v-toolbar__content .v-input__slot {
+    margin: 0;
+}
+body .v-btn {
+    text-transform: unset;
+}
+body .hidden {
+    display: none !important;
+}
+body .v-sheet {
+    border-radius: 2px;
+}
+body .v-card {
+    -webkit-box-shadow: 0 0px 1px 0px rgba(0,0,0,0.1), 0 1px 1px 0 rgba(0,0,0,0.115), 0 1px 4px 0 rgba(0,0,0,.12);
+    box-shadow: 0 0px 1px 0px rgba(0,0,0,0.1), 0 1px 1px 0 rgba(0,0,0,0.115), 0 1px 4px 0 rgba(0,0,0,.12);
+}
+body .v-list-item__icon {
+    margin: 8px 0;
+}
+body .unflex {
+  flex: unset !important;
+  padding: 0 !important;
+}
+body .default__screen .v-subheader {
+    font-weight: bold;
+}
+body .vuejx__header .theme--light.v-chip:not(.v-chip--active) {
+    background: transparent;
+}
+body #vuejx__table__wrap {
+    position: relative;
+    overflow: hidden;
+}

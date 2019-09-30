@@ -1,0 +1,1 @@
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0});var graphql_tools_1=require("graphql-tools"),vuejx_1=require("./vuejx"),mongo_1=require("./mongo");exports.default=graphql_tools_1.mergeSchemas({schemas:[vuejx_1.default,mongo_1.default]});
