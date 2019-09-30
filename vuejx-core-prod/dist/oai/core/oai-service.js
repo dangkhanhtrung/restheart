@@ -1,1 +1,0 @@
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0});var OaiService=function(){function e(e,r){this.parameters=r,this.oaiProvider=e(this.parameters)}return e.prototype.getParameters=function(){return this.parameters},e.prototype.getProvider=function(){return this.oaiProvider},e}();exports.OaiService=OaiService;

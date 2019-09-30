@@ -1,1 +1,0 @@
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.vuejx_INDEX="_all",exports.vuejx_TYPE="vuejx";

@@ -1,1 +1,0 @@
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0});var accountService_1=require("./accountService"),vuejxService_1=require("./vuejxService");exports.vuejxService=new vuejxService_1.default("vuejx"),exports.accountService=new accountService_1.default("vuejx");
