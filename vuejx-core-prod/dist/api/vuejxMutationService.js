@@ -236,16 +236,10 @@ var vuejxMutationControl = /** @class */ (function (_super) {
                         if (body['shortName'] !== undefined && body['shortName'] !== null && body['shortName'] !== '') {
                             findOneQuery = { shortName: body['shortName'] };
                         }
-                        else if (body['_id'] !== undefined && body['_id'] !== null && body['_id'] !== '') {
+                        if (body['_id'] !== undefined && body['_id'] !== null && body['_id'] !== '') {
                             findOneQuery = { _id: new ObjectId(body['_id']) };
                         }
-                        return [4 /*yield*/, config_2.getClient().db(db).collection(collection).findOne(findOneQuery, {
-                                username: 1,
-                                openAccess: 1,
-                                accessRoles: 1,
-                                accessUsers: 1,
-                                accessEmails: 1
-                            })];
+                        return [4 /*yield*/, this.findDataChecker(db, collection, findOneQuery, { modifiedAt: -1 }, 0, 1)];
                     case 2:
                         detail = _a.sent();
                         if (String(detail).length === 0) {
@@ -260,13 +254,15 @@ var vuejxMutationControl = /** @class */ (function (_super) {
                         return [4 /*yield*/, arrays_1.verifyBody(body)];
                     case 4:
                         _a.sent();
+                        console.log('bodybodybodybodybodybodybodybody', body);
                         _a.label = 5;
                     case 5:
                         _a.trys.push([5, 7, , 8]);
                         delete body['_id'];
-                        return [4 /*yield*/, config_2.getClient().db(db).collection(collection).updateOne(findOneQuery, { $set: body })];
+                        return [4 /*yield*/, config_2.getClient().db(db).collection(collection).updateOne({ _id: new ObjectId(detail[0]['_id']) }, { $set: body })];
                     case 6:
                         updateOne = _a.sent();
+                        console.log('updateOneupdateOneupdateOneupdateOneupdateOne', updateOne);
                         if (updateOne['modifiedCount'] > 0) {
                             reindex_1.reindex(db, collection, elasticsearch_1.elasticClient, user, body['modifiedAt']);
                             return [2 /*return*/, {
@@ -307,7 +303,7 @@ var vuejxMutationControl = /** @class */ (function (_super) {
                     case 2:
                         filter = _a.sent();
                         if (sort === undefined || sort === null || sort === '') {
-                            sort = { modifiedAt: 1 };
+                            sort = { modifiedAt: -1 };
                         }
                         if (skip === undefined || skip === null || skip === '') {
                             skip = 0;
@@ -374,7 +370,7 @@ var vuejxMutationControl = /** @class */ (function (_super) {
                     case 2:
                         filter = _a.sent();
                         if (sort === undefined || sort === null || sort === '') {
-                            sort = { modifiedAt: 1 };
+                            sort = { modifiedAt: -1 };
                         }
                         if (skip === undefined || skip === null || skip === '') {
                             skip = 0;
