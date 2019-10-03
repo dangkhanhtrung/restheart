@@ -1,6 +1,8 @@
-cd /Users/binhth/Documents/GitHub/restheart/gateway && npm install
-cd /Users/binhth/Documents/GitHub/restheart/oauth2-client && npm install
-cd /Users/binhth/Documents/GitHub/restheart/restheart-security && npm install
-cd /Users/binhth/Documents/GitHub/restheart/vuejx-client && npm install
-cd /Users/binhth/Documents/GitHub/restheart/vuejx-core && npm install
-cd /Users/binhth/Documents/GitHub/restheart/restheart-core && mvn package
+cd gateway && npm install
+cd ../oauth2-client-prod && npm install
+cd ../restheart-security && npm install
+cd ../vuejx-client-prod && npm install
+cd ../vuejx-core-prod && npm install
+cd ../restheart-core && mvn package
+docker volume create --name=mongo_data
+docker-compose up
