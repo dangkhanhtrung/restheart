@@ -328,9 +328,6 @@ body .employee__table .e-pager {
   body .employee__table .vuejx__pagging .e-numericcontainer .v-select.v-text-field input {
     max-width: 68px;
   }
-  body .bieu__do__column {
-    min-width: 60px !important;
-}
 body .v-toolbar__title {
   font-size: 1.1rem;
   font-weight: 500;
