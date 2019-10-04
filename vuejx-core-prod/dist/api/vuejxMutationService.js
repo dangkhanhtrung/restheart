@@ -51,6 +51,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var httpRequest_1 = require("./httpRequest");
 var config_1 = require("../config");
 var elasticsearch_1 = require("../boostrap/elasticsearch");
+var constant_1 = require("../constant");
 var arrays_1 = require("../utils/arrays");
 var permission_es_1 = require("../utils/permission_es");
 var reindex_1 = require("../utils/reindex");
@@ -235,16 +236,10 @@ var vuejxMutationControl = /** @class */ (function (_super) {
                         if (body['shortName'] !== undefined && body['shortName'] !== null && body['shortName'] !== '') {
                             findOneQuery = { shortName: body['shortName'] };
                         }
-                        else if (body['_id'] !== undefined && body['_id'] !== null && body['_id'] !== '') {
+                        if (body['_id'] !== undefined && body['_id'] !== null && body['_id'] !== '') {
                             findOneQuery = { _id: new ObjectId(body['_id']) };
                         }
-                        return [4 /*yield*/, config_2.getClient().db(db).collection(collection).findOne(findOneQuery, {
-                                username: 1,
-                                openAccess: 1,
-                                accessRoles: 1,
-                                accessUsers: 1,
-                                accessEmails: 1
-                            })];
+                        return [4 /*yield*/, this.findDataChecker(db, collection, findOneQuery, { modifiedAt: -1 }, 0, 1)];
                     case 2:
                         detail = _a.sent();
                         if (String(detail).length === 0) {
@@ -259,13 +254,15 @@ var vuejxMutationControl = /** @class */ (function (_super) {
                         return [4 /*yield*/, arrays_1.verifyBody(body)];
                     case 4:
                         _a.sent();
+                        console.log('bodybodybodybodybodybodybodybody', body);
                         _a.label = 5;
                     case 5:
                         _a.trys.push([5, 7, , 8]);
                         delete body['_id'];
-                        return [4 /*yield*/, config_2.getClient().db(db).collection(collection).updateOne(findOneQuery, { $set: body })];
+                        return [4 /*yield*/, config_2.getClient().db(db).collection(collection).updateOne({ _id: new ObjectId(detail[0]['_id']) }, { $set: body })];
                     case 6:
                         updateOne = _a.sent();
+                        console.log('updateOneupdateOneupdateOneupdateOneupdateOne', updateOne);
                         if (updateOne['modifiedCount'] > 0) {
                             reindex_1.reindex(db, collection, elasticsearch_1.elasticClient, user, body['modifiedAt']);
                             return [2 /*return*/, {
@@ -306,7 +303,7 @@ var vuejxMutationControl = /** @class */ (function (_super) {
                     case 2:
                         filter = _a.sent();
                         if (sort === undefined || sort === null || sort === '') {
-                            sort = { modifiedAt: 1 };
+                            sort = { modifiedAt: -1 };
                         }
                         if (skip === undefined || skip === null || skip === '') {
                             skip = 0;
@@ -373,7 +370,7 @@ var vuejxMutationControl = /** @class */ (function (_super) {
                     case 2:
                         filter = _a.sent();
                         if (sort === undefined || sort === null || sort === '') {
-                            sort = { modifiedAt: 1 };
+                            sort = { modifiedAt: -1 };
                         }
                         if (skip === undefined || skip === null || skip === '') {
                             skip = 0;
@@ -495,7 +492,7 @@ var vuejxMutationControl = /** @class */ (function (_super) {
                     case 7:
                         removeById = _a.sent();
                         if (removeById['result']['ok'] > 0) {
-                            reindex_1.reindex(db, collection, elasticsearch_1.elasticClient, user, new Date().getTime() + '');
+                            elasticsearch_1.deleteDocument(elasticsearch_1.elasticClient, db + '___' + collection, constant_1._TYPE, String(id) + '');
                             return [2 /*return*/, {
                                     statusCode: 200
                                 }];
@@ -550,7 +547,7 @@ var vuejxMutationControl = /** @class */ (function (_super) {
                     case 7:
                         removeById = _a.sent();
                         if (removeById['result']['ok'] > 0) {
-                            reindex_1.reindex(db, collection, elasticsearch_1.elasticClient, user, new Date().getTime() + '');
+                            elasticsearch_1.deleteDocument(elasticsearch_1.elasticClient, db + '___' + collection, constant_1._TYPE, String(detail[0]['_id']) + '');
                             return [2 /*return*/, {
                                     statusCode: 200
                                 }];
@@ -573,7 +570,7 @@ var vuejxMutationControl = /** @class */ (function (_super) {
     };
     vuejxMutationControl.prototype.removeMany = function (token, db, collection, filter) {
         return __awaiter(this, void 0, void 0, function () {
-            var user, detail, error, errorCount, key, errorES, removeMany, e_8;
+            var user, detail, error, errorCount, key, errorES, removeMany, key, e_8;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.defaultBody(token, {}, collection, false)];
@@ -620,7 +617,11 @@ var vuejxMutationControl = /** @class */ (function (_super) {
                     case 10:
                         removeMany = _a.sent();
                         if (removeMany['result']['ok'] > 0) {
-                            reindex_1.reindex(db, collection, elasticsearch_1.elasticClient, user, new Date().getTime() + '');
+                            for (key = 0; key < 1000; key++) {
+                                if (detail[key] !== undefined && detail[key] !== null) {
+                                    elasticsearch_1.deleteDocument(elasticsearch_1.elasticClient, db + '___' + collection, constant_1._TYPE, String(detail[key]['_id']) + '');
+                                }
+                            }
                             return [2 /*return*/, {
                                     statusCode: 200
                                 }];

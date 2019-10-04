@@ -150,6 +150,9 @@ body .hd__screen > div {
     padding: 0;
   }
 
+  body .vuejx__header .v-slide-item--active.v-chip.v-size--default {
+    font-weight: bold;
+  }
 body .vuejx__header .v-chip.v-size--default {
     border-radius: 0;
     height: 42px;
@@ -184,11 +187,13 @@ body .v-btn {
 body .employee__table table {
     width: 100%;
     border-collapse: collapse;
+    background: #fff;
 }
 .chart__table__preview table, .chart__table__preview td, .chart__table__preview th {
     padding: 8px 10px!important;
     border: 1px solid #dcdcdc!important;
     color: #000;
+    font-size: 14px;
 }
 body .v-text-field.v-text-field--solo .v-input__control {
     min-height: 32px;
@@ -225,4 +230,137 @@ body .vuejx__header .theme--light.v-chip:not(.v-chip--active) {
 body #vuejx__table__wrap {
     position: relative;
     overflow: hidden;
+}
+
+
+
+body .employee__table .e-pager {
+    border-style: solid;
+    border-width: 1px;
+    display: inline-block;
+    font-size: 13px;
+    padding: 0;
+    white-space: normal;
+    width: 100%;
+  }
+  
+  body .employee__table .e-pager [class^='e-'] {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+  
+  body .employee__table .e-pager div.e-parentmsgbar {
+    float: right;
+    padding-bottom: 9px;
+    padding-right: 18px;
+    padding-top: 14px;
+    padding: 4px;
+    max-width: 140px;
+  }
+  
+  body .employee__table .e-pager .e-pagesizes {
+    display: inline;
+  }
+  
+  body .employee__table .e-pager .e-pagerdropdown {
+    display: inline-block;
+    height: 32px;
+    margin-left: 12px;
+    margin-top: -22px;
+    overflow: hidden;
+    vertical-align: middle;
+    width: 90px;
+  }
+  
+  body .employee__table .e-pager div,
+  body .employee__table .e-pager a {
+    display: inline;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+  /*! Pager theme */
+  body .employee__table .e-pager {
+    background-color: #fff;
+    border-color: #e0e0e0;
+    color: #000;
+    opacity: 0.87;
+  }
+  
+  body .employee__table .e-pager .e-pager-default:hover {
+    background: #fff;
+    color: #000;
+    opacity: 0.87;
+  }
+  
+  body .employee__table .e-pager .e-pagercontainer {
+    background-color: #fff;
+    border-color: #e0e0e0;
+    display: flex;
+  }
+  
+  body .employee__table .vuejx__pagging {
+    height: 42px !important;
+    position: relative;
+  }
+  
+  body .employee__table .vuejx__pagging .v-autocomplete .v-select__slot {
+    display: flex;
+  }
+  
+  body .employee__table .vuejx__pagging,
+  body .employee__table .e-grid .e-gridcontent {
+    width: calc(100% + 2px);
+    margin-left: -1px;
+    display: flex;
+  }
+  
+  body .employee__table .navigation__drawer__open .vuejx__pagging,
+  body .employee__table .pagging__fix .vuejx__pagging {
+    width: calc(100% - 240px);
+    z-index: 2;
+    position: fixed;
+    bottom: 0;
+  }
+  
+  body .employee__table .vuejx__pagging .e-numericcontainer .v-select.v-text-field input {
+    max-width: 68px;
+  }
+  body .bieu__do__column {
+    min-width: 60px !important;
+}
+body .v-toolbar__title {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+body .vuejx__chips_filter .v-list-group__header {
+    margin-right: 0;
+    min-width: 20px;
+    padding: 0 8px;
+}
+body .vuejx__chips_filter .v-list-group__header .v-list-item__icon i.v-icon {
+    font-size: 16px;
+    color: #212121;
+}
+body .vuejx__chips_filter .v-list-group__header .v-list-group__header__prepend-icon {
+    min-width: 15px;
+}
+body .vuejx__chips_filter .v-list-group__header .v-list-group__header__append-icon i.v-icon {
+    font-size: 20px;
+    margin-right: 2px;
+}
+body .vuejx__chips_filter .v-list-group__header .v-list-item__title {
+    color: #212121;
+    font-weight: bold;
+}
+body .v-application--is-ltr .vuejx__chips_filter .v-list-group--no-action>.v-list-group__items>div>.v-list-item {
+    padding-left: 32px;
+}
+body .qlt_timkiem .v-toolbar__content {
+    padding: 0;
+}
+body .v-menu__content {
+    min-width: 290px !important;
 }

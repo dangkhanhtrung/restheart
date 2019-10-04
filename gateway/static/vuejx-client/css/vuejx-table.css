@@ -4490,6 +4490,7 @@ body .e-grid td.e-active {
 
 body .vuejx__pagging {
   height: 42px !important;
+  position: relative;
 }
 body .vuejx__pagging .v-autocomplete .v-select__slot {
   display: flex;
@@ -4511,7 +4512,7 @@ body .e-grid .e-groupdroparea.e-grouped {
   padding: 9px 0px 9px !important;
 }
 body .e-numericcontainer .v-autocomplete {
-  display: block;
+  display: block !important;
   margin: 0;
   padding: 4px;
   max-width: 120px;
