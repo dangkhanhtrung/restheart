@@ -123,6 +123,9 @@ var vuejxMutationControl = /** @class */ (function (_super) {
                     case 0: return [4 /*yield*/, this.defaultBody(token, body, collection, true)];
                     case 1:
                         user = _a.sent();
+                        if (body['shortName'] == undefined || body['shortName'] == null || body['shortName'] == '') {
+                            body['shortName'] = new ObjectId();
+                        }
                         return [4 /*yield*/, permission_utils_1.permissionPOST(this.path, user, db, collection, body)];
                     case 2:
                         error = _a.sent();
@@ -190,6 +193,9 @@ var vuejxMutationControl = /** @class */ (function (_super) {
                         return [4 /*yield*/, arrays_1.verifyBody(body[key])];
                     case 5:
                         _c.sent();
+                        if (body[key]['shortName'] == undefined || body[key]['shortName'] == null || body[key]['shortName'] == '') {
+                            body[key]['shortName'] = new ObjectId();
+                        }
                         _c.label = 6;
                     case 6:
                         _i++;
@@ -254,7 +260,6 @@ var vuejxMutationControl = /** @class */ (function (_super) {
                         return [4 /*yield*/, arrays_1.verifyBody(body)];
                     case 4:
                         _a.sent();
-                        console.log('bodybodybodybodybodybodybodybody', body);
                         _a.label = 5;
                     case 5:
                         _a.trys.push([5, 7, , 8]);
@@ -262,7 +267,6 @@ var vuejxMutationControl = /** @class */ (function (_super) {
                         return [4 /*yield*/, config_2.getClient().db(db).collection(collection).updateOne({ _id: new ObjectId(detail[0]['_id']) }, { $set: body })];
                     case 6:
                         updateOne = _a.sent();
-                        console.log('updateOneupdateOneupdateOneupdateOneupdateOne', updateOne);
                         if (updateOne['modifiedCount'] > 0) {
                             reindex_1.reindex(db, collection, elasticsearch_1.elasticClient, user, body['modifiedAt']);
                             return [2 /*return*/, {
