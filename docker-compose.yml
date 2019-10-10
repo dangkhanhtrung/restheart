@@ -93,53 +93,6 @@ services:
       - restheart_network
     ports:
       - 9202:9200
-
-  gateway:
-    build: ./gateway
-    image: binhthvuejx/gateway
-    container_name: gateway
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./gateway/:/app
-    networks:
-      - restheart_network
-    ports:
-      - "8080:8080"
-    expose:
-      - 8080
-    environment:
-      - SERVICE_SECURITY=http://vuejx-core-prod:3000
-      - SERVICE_RESTHEART=http://restheart:8080
-      - SECREST_KEY=VnVlSlggQmluaHRoIDEyNTQ1ODEyOSBWdWVqcyBWdWV0aWZ5anM=
-      - CLUSTER_NODE=2
-
-  security:
-    image: binhth/security
-    build: ./restheart-security
-    container_name: security
-    volumes:
-      - ./restheart-security/:/app
-    depends_on:
-      - mongodb
-    networks:
-      - restheart_network
-    ports:
-      - "3001:3000"
-    expose:
-      - 3000
-    environment:
-      - SERVICE_NAME=security
-      - WAIT_HOSTS=vuejx-core-prod:3000
-      - WAIT_HOSTS_TIMEOUT=600
-      - MONGO_HOSTS=mongodb:27017
-      - MONGO_INITDB_OAUTH2_USERNAME=oauth2_user
-      - MONGO_INITDB_OAUTH2_PASSWORD=123456Aa
-      - MONGO_INITDB_DATABASE=oauth2
-      - SECREST_KEY=VnVlSlggQmluaHRoIDEyNTQ1ODEyOSBWdWVqcyBWdWV0aWZ5anM=
-      - EXPIRY_DATE=6h
-      - CLUSTER_NODE=2
-    labels: 
-      - api_route=/security
   
   restheart:
     image: softinstigate/restheart:latest
@@ -157,34 +110,6 @@ services:
       - SERVICE_NAME=restheart
     labels: 
       - api_route=/core
-      
-  vuejx-core-prod:
-    build: ./vuejx-core-prod
-    container_name: vuejx-core-prod
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./store/logs/vuejx-core-prod:/log
-      - ./vuejx-core-prod/:/app
-    networks:
-      - restheart_network
-    ports:
-      - "3002:3000"
-    expose:
-      - 3000
-    environment:
-      - SERVICE_NAME=vuejx
-      - WAIT_HOSTS=elasticsearch:9200
-      - MONGO_INITDB_OAUTH2_USERNAME=oauth2_user
-      - MONGO_INITDB_OAUTH2_PASSWORD=123456Aa
-      - PROJECT_SERVICE_HOST=http://restheart:8080
-      - SECURITY_SERVICE_HOST=http://security:3000
-      - WAIT_HOSTS_TIMEOUT=600
-      - NODE_ENV=development
-      - SECREST_KEY=VnVlSlggQmluaHRoIDEyNTQ1ODEyOSBWdWVqcyBWdWV0aWZ5anM=
-      - EXPIRY_DATE=6h
-      - CLUSTER_NODE=2
-    labels: 
-      - api_route=/vuejx
 
   mongodb:
     image: mongo
@@ -213,6 +138,77 @@ services:
     expose:
       - 27017
   
+      
+  vuejx-core-prod:
+    build: ./vuejx-core-prod
+    container_name: vuejx-core-prod
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./store/logs/vuejx-core-prod:/log
+    networks:
+      - restheart_network
+    ports:
+      - "3002:3000"
+    expose:
+      - 3000
+    environment:
+      - SERVICE_NAME=vuejx
+      - WAIT_HOSTS=elasticsearch:9200
+      - MONGO_INITDB_OAUTH2_USERNAME=oauth2_user
+      - MONGO_INITDB_OAUTH2_PASSWORD=123456Aa
+      - PROJECT_SERVICE_HOST=http://restheart:8080
+      - SECURITY_SERVICE_HOST=http://security:3000
+      - WAIT_HOSTS_TIMEOUT=600
+      - NODE_ENV=development
+      - SECREST_KEY=VnVlSlggQmluaHRoIDEyNTQ1ODEyOSBWdWVqcyBWdWV0aWZ5anM=
+      - EXPIRY_DATE=6h
+      - CLUSTER_NODE=2
+      - max_result_window=10000000
+    labels: 
+      - api_route=/vuejx
+
+  security:
+    image: binhth/security
+    build: ./restheart-security
+    container_name: security
+    depends_on:
+      - mongodb
+    networks:
+      - restheart_network
+    ports:
+      - "3001:3000"
+    expose:
+      - 3000
+    environment:
+      - SERVICE_NAME=security
+      - MONGO_HOSTS=mongodb:27017
+      - MONGO_INITDB_OAUTH2_USERNAME=oauth2_user
+      - MONGO_INITDB_OAUTH2_PASSWORD=123456Aa
+      - MONGO_INITDB_DATABASE=oauth2
+      - SECREST_KEY=VnVlSlggQmluaHRoIDEyNTQ1ODEyOSBWdWVqcyBWdWV0aWZ5anM=
+      - EXPIRY_DATE=6h
+      - CLUSTER_NODE=2
+    labels: 
+      - api_route=/security
+
+  gateway:
+    build: ./gateway
+    image: binhthvuejx/gateway
+    container_name: gateway
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - restheart_network
+    ports:
+      - "8080:8080"
+    expose:
+      - 8080
+    environment:
+      - SERVICE_SECURITY=http://vuejx-core-prod:3000
+      - SERVICE_RESTHEART=http://restheart:8080
+      - SECREST_KEY=VnVlSlggQmluaHRoIDEyNTQ1ODEyOSBWdWVqcyBWdWV0aWZ5anM=
+      - CLUSTER_NODE=2
+
   oauth2-client-prod:
     build: ./oauth2-client-prod
     container_name: oauth2-client-prod
@@ -229,8 +225,6 @@ services:
     labels:
       - api_route=/login
     command: sh -c "npm install && node server.js"
-    volumes:
-      - ./oauth2-client-prod/:/app
     networks:
       - restheart_network
 
@@ -250,7 +244,7 @@ services:
       - CLUSTER_NODE=2
     labels: 
       - api_route=/ui
-    command: sh -c "npm install && npm start"
+    command: sh -c "npm install && node server.js"
     volumes:
       - ./vuejx-client-prod/:/app
     networks:

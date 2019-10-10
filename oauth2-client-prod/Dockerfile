@@ -3,7 +3,11 @@ FROM node:10.16.0
 # make the 'app' folder the current working directory
 WORKDIR /app
 
-COPY server.js ./
+COPY server.js /app
+
+ADD dist /app/
+COPY dist /app/dist
+RUN ls /app/dist/
 
 # install project dependencies
 RUN npm install express serve-static cluster
