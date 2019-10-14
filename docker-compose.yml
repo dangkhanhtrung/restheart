@@ -93,7 +93,7 @@ services:
       - restheart_network
     ports:
       - 9202:9200
-  
+      
   restheart:
     image: softinstigate/restheart:latest
     build: ./restheart-core
@@ -249,3 +249,19 @@ services:
       - ./vuejx-client-prod/:/app
     networks:
       - restheart_network
+
+  coredb-app:
+    build: ./restdb
+    working_dir: /restdb
+    volumes:
+      - ./restdb:/restdb
+      - ~/.m2:/root/.m2
+    networks:
+      - restheart_network
+    ports:
+      - 8088:8088
+    expose:
+      - 8088
+    command: mvn clean spring-boot:run -Drun.jvmArguments='-Dserver.port=8088'
+    depends_on:
+      - mongodb
