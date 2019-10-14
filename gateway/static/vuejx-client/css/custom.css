@@ -526,3 +526,7 @@ body .chart__table__preview .e-pagercontainer > div > i.e-nextpagedisabled___e-d
 body .chart__table__preview .e-pagercontainer > div > i {
   color: #bdbdbd !important;
 }
+body .chart__table__preview es_em {
+  background: #FFF59D;
+  padding: 6px;
+}
