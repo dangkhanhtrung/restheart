@@ -4,12 +4,18 @@ RUN mkdir /app
 WORKDIR /app
 
 COPY package.json /app
-COPY oai-pmh.js /app
 COPY oai-pmh-list.js /app
+COPY oai-pmh.js /app
 
-RUN npm install
+ADD dist /app/
+COPY dist /app/dist
+RUN ls /app/dist/
 
-RUN cp /app/oai-pmh.js ./node_modules/oai-pmh/src/ && cp /app/oai-pmh-list.js ./node_modules/oai-pmh/src/
+RUN node -v
+RUN npm run clean
+RUN npm install -g nodemon
+
+COPY . .
 
 ## THE LIFE SAVER
 ADD https://github.com/vuejx/docker-compose-wait/releases/download/2.5.1/wait /wait

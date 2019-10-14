@@ -3,17 +3,18 @@ package com.fds.repository.qlvtdb;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "qlvt_cua_khau")
-public class CuaKhau {
+@Document(collection = "qlvt_not")
+public class Not {
 	@Id
 	private String id;
+
+	private Long gio_bendi;
+	private Long gio_benden;
 	
-	private String ma_cuakhau;
-	private String ten_cuakhau;
-	private CoreObjectSource tinh;
-	private CoreObjectSource quocgia_qt;
-	private String shortName;
-	private String title;
+	private CoreObjectSource status;
+	
+	private NotNgaySource[] not_ngay;
+
 	private String site;
 	private String storage;
 	private int openAccess;
@@ -22,9 +23,27 @@ public class CuaKhau {
 	private AccessRole[] accessEmails;
 	private long createdAt;
 	private long modifiedAt;
+	private String type;
+	private CoreObjectSource tuyen;
+	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public CoreObjectSource getTuyen() {
+		return tuyen;
+	}
+
+	public void setTuyen(CoreObjectSource tuyen) {
+		this.tuyen = tuyen;
+	}
 
 	public String getSite() {
-		return this.site;
+		return site;
 	}
 
 	public void setSite(String site) {
@@ -32,7 +51,7 @@ public class CuaKhau {
 	}
 
 	public String getStorage() {
-		return this.storage;
+		return storage;
 	}
 
 	public void setStorage(String storage) {
@@ -40,7 +59,7 @@ public class CuaKhau {
 	}
 
 	public int getOpenAccess() {
-		return this.openAccess;
+		return openAccess;
 	}
 
 	public void setOpenAccess(int openAccess) {
@@ -48,7 +67,7 @@ public class CuaKhau {
 	}
 
 	public AccessRole[] getAccessRoles() {
-		return this.accessRoles;
+		return accessRoles;
 	}
 
 	public void setAccessRoles(AccessRole[] accessRoles) {
@@ -56,7 +75,7 @@ public class CuaKhau {
 	}
 
 	public AccessRole[] getAccessUsers() {
-		return this.accessUsers;
+		return accessUsers;
 	}
 
 	public void setAccessUsers(AccessRole[] accessUsers) {
@@ -64,7 +83,7 @@ public class CuaKhau {
 	}
 
 	public AccessRole[] getAccessEmails() {
-		return this.accessEmails;
+		return accessEmails;
 	}
 
 	public void setAccessEmails(AccessRole[] accessEmails) {
@@ -72,7 +91,7 @@ public class CuaKhau {
 	}
 
 	public long getCreatedAt() {
-		return this.createdAt;
+		return createdAt;
 	}
 
 	public void setCreatedAt(long createdAt) {
@@ -80,29 +99,13 @@ public class CuaKhau {
 	}
 
 	public long getModifiedAt() {
-		return this.modifiedAt;
+		return modifiedAt;
 	}
 
 	public void setModifiedAt(long modifiedAt) {
 		this.modifiedAt = modifiedAt;
 	}
 
-	public String getShortName() {
-		return this.shortName;
-	}
-
-	public void setShortName(String shortName) {
-		this.shortName = shortName;
-	}
-
-	public String getTitle() {
-		return this.title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	
 	public String getId() {
 		return id;
 	}
@@ -111,35 +114,36 @@ public class CuaKhau {
 		this.id = id;
 	}
 
-	public String getMa_cuakhau() {
-		return ma_cuakhau;
+	public Long getGio_bendi() {
+		return gio_bendi;
 	}
 
-	public void setMa_cuakhau(String ma_cuakhau) {
-		this.ma_cuakhau = ma_cuakhau;
+	public void setGio_bendi(Long gio_bendi) {
+		this.gio_bendi = gio_bendi;
 	}
 
-	public String getTen_cuakhau() {
-		return ten_cuakhau;
+	public Long getGio_benden() {
+		return gio_benden;
 	}
 
-	public void setTen_cuakhau(String ten_cuakhau) {
-		this.ten_cuakhau = ten_cuakhau;
+	public void setGio_benden(Long gio_benden) {
+		this.gio_benden = gio_benden;
 	}
 
-	public CoreObjectSource getTinh() {
-		return tinh;
+	public CoreObjectSource getStatus() {
+		return status;
 	}
 
-	public void setTinh(CoreObjectSource tinh) {
-		this.tinh = tinh;
+	public void setStatus(CoreObjectSource status) {
+		this.status = status;
 	}
 
-	public CoreObjectSource getQuocgia_qt() {
-		return quocgia_qt;
+	public NotNgaySource[] getNot_ngay() {
+		return not_ngay;
 	}
 
-	public void setQuocgia_qt(CoreObjectSource quocgia_qt) {
-		this.quocgia_qt = quocgia_qt;
+	public void setNot_ngay(NotNgaySource[] not_ngay) {
+		this.not_ngay = not_ngay;
 	}
+	
 }

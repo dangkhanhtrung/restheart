@@ -37,10 +37,10 @@ public class TuyenController {
 	    return tuyen;
 	}	
 	
-	@GetMapping(value = "/{id}")
+	@GetMapping(value = "/{shortName}")
 	@ResponseBody
-    public Tuyen getTuyenById(@PathVariable("id") String id) {
-        return tuyenRepository.findById(id).get();
+    public Tuyen getTuyenById(@PathVariable("shortName") String shortName) {
+        return tuyenRepository.findByShortName(shortName);
     }
 
 	@PutMapping(value = "/{id}")

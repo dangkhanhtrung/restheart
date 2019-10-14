@@ -26,15 +26,22 @@ public class Tuyen {
 	private int ll_kt;
 	private String lotrinh_di;
 	private String lotrinh_den;
+	private String lotrinh_ve;
+	public String getLotrinh_ve() {
+		return lotrinh_ve;
+	}
+	public void setLotrinh_ve(String lotrinh_ve) {
+		this.lotrinh_ve = lotrinh_ve;
+	}
 	private int trangthai;
 	private String ghichu;
-	private CoreObject cua_khau;
+	private CuaKhauSource cua_khau;
 	@JsonProperty(value = "STT_QG")
-	private String STT_QG;
+	private Integer STT_QG;
 	private String shortName;
 	private String title;
-	private CoreObject ben_xe;
-	private CoreObject loai_tuyen;
+	private BenXeSource ben_xe;
+	private LoaiTuyenSource loai_tuyen;
 	private String site;
 	private String storage;
 	private int openAccess;
@@ -44,6 +51,36 @@ public class Tuyen {
 	private long createdAt;
 	private long modifiedAt;
 
+	private BenXeSource ben_xe_di;
+	private BenXeSource ben_xe_den;
+	
+	private CoreObjectSource status;
+	private String description;
+	
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public CoreObjectSource getStatus() {
+		return status;
+	}
+	public void setStatus(CoreObjectSource status) {
+		this.status = status;
+	}
+	public BenXeSource getBen_xe_di() {
+		return ben_xe_di;
+	}
+	public void setBen_xe_di(BenXeSource ben_xe_di) {
+		this.ben_xe_di = ben_xe_di;
+	}
+	public BenXeSource getBen_xe_den() {
+		return ben_xe_den;
+	}
+	public void setBen_xe_den(BenXeSource ben_xe_den) {
+		this.ben_xe_den = ben_xe_den;
+	}
 	public long getCreatedAt() {
 		return this.createdAt;
 	}
@@ -108,27 +145,27 @@ public class Tuyen {
 		this.accessEmails = accessEmails;
 	}
 
-	public CoreObject getLoai_tuyen() {
+	public LoaiTuyenSource getLoai_tuyen() {
 		return this.loai_tuyen;
 	}
 
-	public void setLoai_tuyen(CoreObject loai_tuyen) {
+	public void setLoai_tuyen(LoaiTuyenSource loai_tuyen) {
 		this.loai_tuyen = loai_tuyen;
 	}
 
-	public CoreObject getBen_xe() {
+	public BenXeSource getBen_xe() {
 		return this.ben_xe;
 	}
 
-	public void setBen_xe(CoreObject ben_xe) {
+	public void setBen_xe(BenXeSource ben_xe) {
 		this.ben_xe = ben_xe;
 	}
 
-	public String getSTT_QG() {
+	public Integer getSTT_QG() {
 		return this.STT_QG;
 	}
 
-	public void setSTT_QG(String STT_QG) {
+	public void setSTT_QG(Integer STT_QG) {
 		this.STT_QG = STT_QG;
 	}
 
@@ -148,11 +185,11 @@ public class Tuyen {
 		this.title = title;
 	}
 
-	public CoreObject getCua_khau() {
+	public CuaKhauSource getCua_khau() {
 		return this.cua_khau;
 	}
 
-	public void setCua_khau(CoreObject cua_khau) {
+	public void setCua_khau(CuaKhauSource cua_khau) {
 		this.cua_khau = cua_khau;
 	}
 

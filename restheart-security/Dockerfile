@@ -5,12 +5,13 @@ WORKDIR /app
 
 COPY package.json /app
 
+ADD src /app/
+COPY src /app/./src
+RUN ls /app/./src/
+
 RUN node -v
-RUN npm install -g nodemon
 RUN npm install
 
-## THE LIFE SAVER
-ADD https://github.com/vuejx/docker-compose-wait/releases/download/2.5.1/wait /wait
-RUN chmod +x /wait
+RUN ls
 
-CMD /wait && npm start
+CMD node /app/src/index.js

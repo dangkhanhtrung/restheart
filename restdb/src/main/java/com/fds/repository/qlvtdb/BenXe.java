@@ -3,12 +3,14 @@ package com.fds.repository.qlvtdb;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fds.repository.coredb.LoaiBenSource;
+
 @Document(collection = "qlvt_ben_xe")
 public class BenXe {
 	@Id
 	private String id;
 
-	private Long ma_bx;
+	private String ma_bx;
 	private String ten_bx;
 	private String ten_viettat;
 	private String diachi;
@@ -21,6 +23,78 @@ public class BenXe {
 	private int trangthai;
 	private String ghichu;
 
+	private String so_gtvt;
+	private LoaiBenSource loai_ben;
+	private int sl_xekhach;
+	private int sl_xekhac;
+	private int sl_nhacho;
+	private int sl_tuyen;
+	private int sl_xuatben;
+	private float dientich;
+	
+	public String getSo_gtvt() {
+		return so_gtvt;
+	}
+
+	public void setSo_gtvt(String so_gtvt) {
+		this.so_gtvt = so_gtvt;
+	}
+
+	public LoaiBenSource getLoai_ben() {
+		return loai_ben;
+	}
+
+	public void setLoai_ben(LoaiBenSource loai_ben) {
+		this.loai_ben = loai_ben;
+	}
+
+	public int getSl_xekhach() {
+		return sl_xekhach;
+	}
+
+	public void setSl_xekhach(int sl_xekhach) {
+		this.sl_xekhach = sl_xekhach;
+	}
+
+	public int getSl_xekhac() {
+		return sl_xekhac;
+	}
+
+	public void setSl_xekhac(int sl_xekhac) {
+		this.sl_xekhac = sl_xekhac;
+	}
+
+	public int getSl_nhacho() {
+		return sl_nhacho;
+	}
+
+	public void setSl_nhacho(int sl_nhacho) {
+		this.sl_nhacho = sl_nhacho;
+	}
+
+	public int getSl_tuyen() {
+		return sl_tuyen;
+	}
+
+	public void setSl_tuyen(int sl_tuyen) {
+		this.sl_tuyen = sl_tuyen;
+	}
+
+	public int getSl_xuatben() {
+		return sl_xuatben;
+	}
+
+	public void setSl_xuatben(int sl_xuatben) {
+		this.sl_xuatben = sl_xuatben;
+	}
+
+	public float getDientich() {
+		return dientich;
+	}
+
+	public void setDientich(float dientich) {
+		this.dientich = dientich;
+	}
 	private String site;
 	private String storage;
 	private int openAccess;
@@ -118,10 +192,10 @@ public class BenXe {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public Long getMa_bx() {
+	public String getMa_bx() {
 		return ma_bx;
 	}
-	public void setMa_bx(Long ma_bx) {
+	public void setMa_bx(String ma_bx) {
 		this.ma_bx = ma_bx;
 	}
 	public String getTen_bx() {
