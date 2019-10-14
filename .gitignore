@@ -60,3 +60,10 @@ typings/
 # next.js build output
 .next
 restheart-core/target/
+
+.DS_Store
+**/.DS_Store
+
+restheart-core/.classpath
+restheart-core/.project
+restheart-core/.settings/
