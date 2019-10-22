@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -52,6 +53,9 @@ import com.fds.repository.coredb.DictCollection;
 import com.fds.repository.coredb.DictCollectionRepository;
 import com.fds.repository.coredb.DictItem;
 import com.fds.repository.coredb.DictItemRepository;
+import com.fds.repository.coredb.Role;
+import com.fds.repository.coredb.RoleRepository;
+import com.fds.repository.qlvtdb.AccessRole;
 import com.fds.repository.qlvtdb.BenXe;
 import com.fds.repository.qlvtdb.BenXeRepository;
 import com.fds.repository.qlvtdb.BenXeSource;
@@ -104,6 +108,9 @@ public class FileController {
     
     @Autowired
     NotRepository notRepository;
+    
+    @Autowired
+    RoleRepository roleRepository;
     
     @PostMapping("/tuyen")
     public UploadFileResponse importTuyen(@RequestParam("file") MultipartFile file) {
@@ -267,6 +274,17 @@ public class FileController {
                 		tuyen.setBen_xe_den(benXeSource);                		
                 	}
 
+                	AccessRole[] arr1 = new AccessRole[2];
+                	arr1[0] = new AccessRole();
+                	arr1[0].setShortName(maSoDi + "_EDIT");
+                	arr1[0].setPermission("2");
+
+                	arr1[1] = new AccessRole();
+                	arr1[1].setShortName(maSoDen + "_EDIT");
+                	arr1[1].setPermission("2");
+
+                	tuyen.setAccessRoles(arr1);
+                	
                 	System.out.println("" + maSoDi + ", " + maSoDen + ", " + maBenDi + ", " + maBenDen);
                 }
 
@@ -276,7 +294,10 @@ public class FileController {
                 tuyen.setCreatedAt((new Date()).getTime());
                 tuyen.setModifiedAt((new Date()).getTime());
 
-                tuyenRepository.save(tuyen);
+                
+                if (tuyen.getShortName() != null && !"".contentEquals(tuyen.getShortName().trim())) {
+                    tuyenRepository.save(tuyen);                	
+                }
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -1259,6 +1280,7 @@ public class FileController {
                             node.put(key, (int)valueCell.getNumericCellValue());
                         }        
                     }
+                    node.put("shortName", UUID.randomUUID().toString().replaceAll("-", "_"));
                     node.put("site", "guest");
                     node.put("storage", "regular");
                     node.put("accessRoles", mapper.createArrayNode());
@@ -1271,13 +1293,12 @@ public class FileController {
                 }
 
                 DoanhNghiep doanhNghiep = mapper.readValue(node.toString(), DoanhNghiep.class);
-//                DoanhNghiep oldDoanhNghiep = doanhNghiepRepository.findByShortName(doanhNghiep.getShortName());
+                DoanhNghiep oldDoanhNghiep = doanhNghiepRepository.findByMa_dn(doanhNghiep.getMa_dn());
                 doanhNghiepRepository.save(doanhNghiep);
-//                if (oldDoanhNghiep != null) {
-//                }
-//                else {
-//                    doanhNghiepRepository.save(doanhNghiep);
-//                }
+                if (oldDoanhNghiep != null) {
+                	doanhNghiep.setId(oldDoanhNghiep.getId());
+                }
+                doanhNghiepRepository.save(doanhNghiep);
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -1337,7 +1358,7 @@ public class FileController {
                         ObjectNode hieuXeNode = mapper.createObjectNode();
                         hieuXeNode.put("shortName", valueCell.getStringCellValue());
                         String hieuXeCode = valueCell.getStringCellValue();
-                        DictItem hieuXe = dictItemRepository.findByShortName(hieuXeCode);
+                        DictItem hieuXe = dictItemRepository.findByShortNameAndCollection(hieuXeCode, "HIEUXE");
                         if (hieuXe != null) {
                         	hieuXeNode.put("title", hieuXe.getTitle());
                             hieuXeSourceNode.put("_source", hieuXeNode);
@@ -1349,7 +1370,7 @@ public class FileController {
                         ObjectNode nuocSXNode = mapper.createObjectNode();
                         nuocSXNode.put("shortName", valueCell.getStringCellValue());
                         String nuocSxCode = valueCell.getStringCellValue();
-                        DictItem nuocSx = dictItemRepository.findByShortName(nuocSxCode);
+                        DictItem nuocSx = dictItemRepository.findByShortNameAndCollection(nuocSxCode, "NATION");
                         if (nuocSx != null) {
                         	nuocSXNode.put("title", nuocSx.getTitle());
                         	nuocSXSource.put("_source", nuocSXNode);
@@ -1363,11 +1384,45 @@ public class FileController {
                         
                         mauSonNode.put("shortName", valueCell.getStringCellValue());
                         String mauSonCode = valueCell.getStringCellValue();
-                        DictItem mauSon = dictItemRepository.findByShortName(mauSonCode);
+                        DictItem mauSon = dictItemRepository.findByShortNameAndCollection(mauSonCode, "MAUSON");
                         if (mauSon != null) {
                         	mauSonNode.put("title", mauSon.getTitle());
                             node.put("mauson", mauSonSource);                        	
                         }
+                    }
+                    else if ("ma_dn".equals(key)) {
+                        int ma_dn = (int)valueCell.getNumericCellValue();
+                        System.out.println("Ma DN: " + ma_dn);
+                        	
+                        if (ma_dn != 0) {
+                            DoanhNghiep dn = doanhNghiepRepository.findByMa_dn(ma_dn + "");
+                            if (dn != null) {
+                                ObjectNode dnSource = mapper.createObjectNode();
+                                ObjectNode dnNode = mapper.createObjectNode();
+
+                            	dnNode.put("shortName", dn.getShortName());
+                            	dnNode.put("title", dn.getTitle());
+                            		
+                            	dnSource.put("_source", dnNode);
+                            		
+                            	node.put("doanh_nghiep", dnSource);
+                            }                    		
+                        }                  	                    		
+                    }
+                    else if ("tenloai_pt".equals(key)) {
+                    	List<DictItem> listLoaiPts = dictItemRepository.findByTitle(valueCell.getStringCellValue(), "LOAIPT");
+                    	if (listLoaiPts.size() > 0) {
+                    		DictItem loaipt = listLoaiPts.get(0);
+                            ObjectNode loaiptSource = mapper.createObjectNode();
+                            ObjectNode loaiptNode = mapper.createObjectNode();
+
+                        	loaiptNode.put("shortName", loaipt.getShortName());
+                        	loaiptNode.put("title", loaipt.getTitle());
+                        		
+                        	loaiptSource.put("_source", loaiptNode);
+                        		
+                        	node.put("loai_pt", loaiptSource);
+                    	}
                     }
                     else {
                         if (valueCell.getCellTypeEnum() == CellType.STRING) {
@@ -1385,18 +1440,17 @@ public class FileController {
                     node.put("openAccess", 1);
                     node.put("createdAt", (new Date().getTime()));
                     node.put("modifiedAt", (new Date().getTime()));
-                    node.put("doanh_nghiep", mapper.createObjectNode());
-                    node.put("loai_pt", mapper.createObjectNode());
+                    //node.put("doanh_nghiep", mapper.createObjectNode());
+                    //node.put("loai_pt", mapper.createObjectNode());
                     node.put("coquan_ql", mapper.createObjectNode());
                 }
 
                 PhuongTien phuongTien = mapper.readValue(node.toString(), PhuongTien.class);
                 PhuongTien oldPhuongTien = phuongTienRepository.findByShortName(phuongTien.getShortName());
                 if (oldPhuongTien != null) {
+                	phuongTien.setId(oldPhuongTien.getId());
                 }
-                else {
-                    phuongTienRepository.save(phuongTien);
-                }
+                phuongTienRepository.save(phuongTien);
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -1568,5 +1622,118 @@ public class FileController {
         return new UploadFileResponse(fileName, fileDownloadUri,
                 file.getContentType(), file.getSize());
     }
+    
+    @PostMapping("/role")
+    public UploadFileResponse importRole(@RequestParam("file") MultipartFile file) {
+        String fileName = fileStorageService.storeFile(file);
+
+        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/downloadFile/")
+                .path(fileName)
+                .toUriString();
+        Map<String, Integer> mapColumns = new HashMap<>();
+
+        try {
+            FileInputStream excelFile = new FileInputStream(fileStorageService.loadFileAsResource(fileName).getFile());
+            Workbook workbook = null;
+            if (fileName.endsWith("xls")) {
+                workbook = new HSSFWorkbook(excelFile);            	
+            }
+            else if (fileName.endsWith("xlsx")) {
+                workbook = new XSSFWorkbook(excelFile);
+            }
+            Sheet datatypeSheet = workbook.getSheetAt(0);
+            Iterator<Row> iterator = datatypeSheet.iterator();
+            Row titleRow = datatypeSheet.getRow(0);
+
+            // while (iterator.hasNext()) {
+
+            // }
+
+            Iterator<Cell> cellIterator = titleRow.iterator();
+            while (cellIterator.hasNext()) {
+                Cell tempCell = cellIterator.next();
+                mapColumns.put(tempCell.getStringCellValue(), tempCell.getColumnIndex());
+            }
+            
+            while (iterator.hasNext()) {
+                Row currentRow = iterator.next();
+                if (currentRow.getRowNum() == 0) continue;
+                ObjectMapper mapper = new ObjectMapper();
+                ObjectNode node = mapper.createObjectNode();
+                for (String key : mapColumns.keySet()) {
+                    int index = mapColumns.get(key);
+                    Cell valueCell = currentRow.getCell(index);
+
+                    if (valueCell == null) continue;
+                    if (valueCell.getCellTypeEnum() == CellType.STRING) {
+                        node.put(key, valueCell.getStringCellValue());
+                    }
+                    else if (valueCell.getCellTypeEnum() == CellType.NUMERIC) {
+                        node.put(key, (int)valueCell.getNumericCellValue());
+                    }                                                	
+                }
+                node.put("site", "guest");
+                node.put("storage", "regular");
+                node.put("accessRoles", mapper.createArrayNode());
+                node.put("accessUsers", mapper.createArrayNode());
+                node.put("accessEmails", mapper.createArrayNode());
+                node.put("openAccess", 0);
+                node.put("createdAt", (new Date().getTime()));
+                node.put("modifiedAt", (new Date().getTime()));
+                node.put("type", "role");
+                
+                Role role = mapper.readValue(node.toString(), Role.class);
+                role.setDescription(role.getTitle());
+                CoreObjectSource statusSource = new CoreObjectSource();
+                CoreObject status = new CoreObject();
+                status.setShortName("active");
+                status.setTitle("Active");
+                statusSource.set_source(status);
+                role.setStatus(statusSource);
+                
+                Role oldRole = roleRepository.findByShortName(role.getShortName());
+                if (oldRole != null) {
+                	role.setId(oldRole.getId());
+                }
+                else {
+                    role = mapper.readValue(node.toString(), Role.class);
+                    role.setShortName(role.getShortName() + "_VIEW");
+                    role.setDescription(role.getTitle());
+                    status.setShortName("active");
+                    status.setTitle("Active");
+                    statusSource.set_source(status);
+                    role.setStatus(statusSource);
+                	roleRepository.save(role);
+                	
+                    role = mapper.readValue(node.toString(), Role.class);
+                    role.setDescription(role.getTitle());
+                    status.setShortName("active");
+                    status.setTitle("Active");
+                    statusSource.set_source(status);
+                    role.setStatus(statusSource);
+                    role.setShortName(role.getShortName() + "_EDIT");
+                	roleRepository.save(role);
+                	
+                    role = mapper.readValue(node.toString(), Role.class);
+                    role.setDescription(role.getTitle());
+                    status.setShortName("active");
+                    status.setTitle("Active");
+                    statusSource.set_source(status);
+                    role.setStatus(statusSource);
+                    role.setShortName(role.getShortName() + "_DELETE");
+                	roleRepository.save(role);                	                	
+                }
+            	
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        return new UploadFileResponse(fileName, fileDownloadUri,
+                file.getContentType(), file.getSize());
+    }       
     
 }

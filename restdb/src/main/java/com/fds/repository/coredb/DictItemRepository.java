@@ -13,12 +13,12 @@ public interface DictItemRepository extends MongoRepository<DictItem, String> {
 	@Query("{ 'shortName' : '?0', 'dictCollection._source.shortName': '?1' }")
 	DictItem findByShortNameAndCollection(String shortName, String collectionCode);
 	
-	@Query("{'shortName': { $regex: ?0, $options: 'i' }, 'dictCollection._source.shortName': '?1' })")
+	@Query("{'shortName': { $regex: ?0, $options: 'i' }, 'dictCollection._source.shortName': '?1' }")
 	List<DictItem> findLikeShortName(String shortName, String collectionCode);
 
-	@Query("{'title': { $regex: ?0, $options: 'i' }, 'dictCollection._source.shortName': '?1' })")
+	@Query("{'title': { $regex: ?0, $options: 'i' }, 'dictCollection._source.shortName': '?1' }")
 	List<DictItem> findLikeTitle(String title, String collectionCode);
 	
-	@Query("{'title': '?0', 'dictCollection._source.shortName': '?1' })")
+	@Query("{'title': '?0', 'dictCollection._source.shortName': '?1' }")
 	List<DictItem> findByTitle(String title, String collectionCode);	
 }
