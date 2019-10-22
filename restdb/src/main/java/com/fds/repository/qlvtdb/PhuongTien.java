@@ -16,12 +16,12 @@ public class PhuongTien {
 	private CoreObject nuoc_sx;
 	private CoreObject hieuxe;
 	private CoreObject mauson;
-	private int sokhung;
-	private int somay;
+	private String sokhung;
+	private String somay;
 	private int nam_hetnienhan;
 	private int nam_caitao;
 	private int trongtai;
-	private CoreObject loai_pt;
+	private CoreObjectSource loai_pt;
 	private String nguoi_sohuu;
 	private String ghichu;
 	private int trangthai;
@@ -35,13 +35,13 @@ public class PhuongTien {
 	private AccessRole[] accessEmails;
 	private long createdAt;
 	private long modifiedAt;
-	private CoreObject doanh_nghiep;
+	private CoreObjectSource doanh_nghiep;
 
-	public CoreObject getDoanh_nghiep() {
+	public CoreObjectSource getDoanh_nghiep() {
 		return this.doanh_nghiep;
 	}
 
-	public void setDoanh_nghiep(CoreObject doanh_nghiep) {
+	public void setDoanh_nghiep(CoreObjectSource doanh_nghiep) {
 		this.doanh_nghiep = doanh_nghiep;
 	}
 
@@ -170,16 +170,16 @@ public class PhuongTien {
 	public void setMauson(CoreObject mauson) {
 		this.mauson = mauson;
 	}
-	public int getSokhung() {
+	public String getSokhung() {
 		return sokhung;
 	}
-	public void setSokhung(int sokhung) {
+	public void setSokhung(String sokhung) {
 		this.sokhung = sokhung;
 	}
-	public int getSomay() {
+	public String getSomay() {
 		return somay;
 	}
-	public void setSomay(int somay) {
+	public void setSomay(String somay) {
 		this.somay = somay;
 	}
 	public int getNam_hetnienhan() {
@@ -200,10 +200,10 @@ public class PhuongTien {
 	public void setTrongtai(int trongtai) {
 		this.trongtai = trongtai;
 	}
-	public CoreObject getLoai_pt() {
+	public CoreObjectSource getLoai_pt() {
 		return loai_pt;
 	}
-	public void setLoai_pt(CoreObject loai_pt) {
+	public void setLoai_pt(CoreObjectSource loai_pt) {
 		this.loai_pt = loai_pt;
 	}
 	public String getNguoi_sohuu() {
