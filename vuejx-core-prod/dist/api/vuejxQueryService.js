@@ -267,6 +267,61 @@ var vuejxQueryControl = /** @class */ (function (_super) {
             });
         });
     };
+    vuejxQueryControl.prototype.workflowAction = function (token, workflow, parent) {
+        return __awaiter(this, void 0, void 0, function () {
+            var user, detail, access, _i, _a, role, filter, detail;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, api_1.vuejxMutationService.defaultBody(token, {}, '', false)];
+                    case 1:
+                        user = _b.sent();
+                        return [4 /*yield*/, arrays_1.found(user['role'], ['admin'])];
+                    case 2:
+                        if (!_b.sent()) return [3 /*break*/, 5];
+                        return [4 /*yield*/, this.findData('vuejx_cfg', 'vuejx_workflow_action', {
+                                parent: parent,
+                                workflow: workflow
+                            }, {}, 0, 1000, null)];
+                    case 3:
+                        detail = _b.sent();
+                        return [4 /*yield*/, this.buildRespone(detail)];
+                    case 4: return [2 /*return*/, _b.sent()];
+                    case 5:
+                        access = [];
+                        for (_i = 0, _a = user['role']; _i < _a.length; _i++) {
+                            role = _a[_i];
+                            access.push({
+                                "workflowRole._source.shortName": role
+                            });
+                        }
+                        filter = {
+                            "$and": []
+                        };
+                        filter["$and"].push({
+                            parent: parent
+                        });
+                        filter["$and"].push({
+                            workflow: workflow
+                        });
+                        if (access.length > 0) {
+                            access.push({
+                                "workflowRole": {
+                                    $exists: false
+                                }
+                            });
+                            filter["$and"].push({
+                                "$or": access
+                            });
+                        }
+                        return [4 /*yield*/, this.findData('vuejx_cfg', 'vuejx_workflow_action', filter, {}, 0, 1000, null)];
+                    case 6:
+                        detail = _b.sent();
+                        return [4 /*yield*/, this.buildRespone(detail)];
+                    case 7: return [2 /*return*/, _b.sent()];
+                }
+            });
+        });
+    };
     vuejxQueryControl.prototype.userDb = function (token) {
         return __awaiter(this, void 0, void 0, function () {
             var user, listDbs, dbs;

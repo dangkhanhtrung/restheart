@@ -256,12 +256,21 @@ services:
     volumes:
       - ./restdb:/restdb
       - ~/.m2:/root/.m2
+    container_name: coredb
+    depends_on:
+      - mongodb
     networks:
       - restheart_network
     ports:
       - 8088:8088
+    labels:
+      - api_route=/restdb
     expose:
       - 8088
     command: mvn clean spring-boot:run -Drun.jvmArguments='-Dserver.port=8088'
     depends_on:
       - mongodb
+    environment:
+      - SERVICE_NAME=restdb
+    labels: 
+      - api_route=/restdb

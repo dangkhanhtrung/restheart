@@ -106,7 +106,7 @@ body .v-subheader {
 }
 body .v-banner .v-toolbar__title {
   font-size: 18px;
-  line-height: 36px;
+  line-height: 32px;
 }
 body .e-gridcontent .e-content .e-table tr:last-child td {
   border-bottom: 0;
@@ -150,9 +150,6 @@ body .hd__screen > div {
   padding: 0;
 }
 
-body .vuejx__header .v-slide-item--active.v-chip.v-size--default {
-  font-weight: bold;
-}
 body .vuejx__header .v-chip.v-size--default {
   border-radius: 0;
   height: 42px;
@@ -529,4 +526,34 @@ body .chart__table__preview .e-pagercontainer > div > i {
 body .chart__table__preview es_em {
   background: #FFF59D;
   padding: 6px;
+}
+div#mermaid .label {
+  text-align: center;
+  font-size: 15px;
+}
+body div#mermaid .node rect, body div#mermaid .node circle, body div#mermaid .node ellipse, body div#mermaid .node polygon {
+  fill: #fff;
+  stroke: #dcdcdc;
+}
+body .table__workflow .v-input__slot {
+  margin: 0;
+}
+body .vuejx__header .v-slide-item--active.v-chip--active:before {
+  opacity: 0 !important;
+}
+body .vuejx__header .v-chip--active--vuejx.v-chip.v-size--default {
+  font-weight: bold;
+}
+body .vuejx__header .v-chip--active--vuejx.v-chip.v-size--default:before {
+  opacity: .12 !important;
+}
+body .v-text-field.v-text-field--solo .v-input__append-outer, 
+body .v-text-field.v-text-field--solo .v-input__prepend-outer {
+  margin-top: 6px;
+}
+body .employee__table .chart__table__preview td {
+    vertical-align: top !important;
+}
+body .vuejx__file_manager .v-banner__wrapper {
+  padding-bottom: 0 !important;
 }

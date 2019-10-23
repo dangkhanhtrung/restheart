@@ -76,7 +76,7 @@ var vuejxMutationControl = /** @class */ (function (_super) {
                         return [4 /*yield*/, token_1.verify(token)];
                     case 1:
                         user = _a.sent();
-                        if (user.hasOwnProperty('tokenExpired') && user['tokenExpired']) {
+                        if (user !== undefined && user !== null && user.hasOwnProperty('tokenExpired') && user['tokenExpired']) {
                             body['username'] = 'guest';
                             user = null;
                         }
@@ -115,9 +115,9 @@ var vuejxMutationControl = /** @class */ (function (_super) {
             });
         });
     };
-    vuejxMutationControl.prototype.createOne = function (token, db, collection, body) {
+    vuejxMutationControl.prototype.createOne = function (token, db, collection, body, opts, actionCode) {
         return __awaiter(this, void 0, void 0, function () {
-            var user, error, errorES, insertOne, e_1;
+            var user, error, errorES, permissProcess, workflowAction, insertOne, e_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.defaultBody(token, body, collection, true)];
@@ -132,18 +132,36 @@ var vuejxMutationControl = /** @class */ (function (_super) {
                         return [4 /*yield*/, permission_es_1.permissionESPOST(this.path, user, db, collection, body, config_2.getClient(), elasticsearch_1.elasticClient)];
                     case 3:
                         errorES = _a.sent();
-                        if (!(error === null && errorES === null)) return [3 /*break*/, 9];
+                        if (!((error === null || typeof error === 'string') && errorES === null)) return [3 /*break*/, 14];
                         return [4 /*yield*/, arrays_1.verifyBody(body)];
                     case 4:
                         _a.sent();
                         _a.label = 5;
                     case 5:
-                        _a.trys.push([5, 7, , 8]);
-                        return [4 /*yield*/, config_2.getClient().db(db).collection(collection).insertOne(body)];
+                        _a.trys.push([5, 12, , 13]);
+                        permissProcess = true;
+                        if (!(typeof error === 'string')) return [3 /*break*/, 8];
+                        return [4 /*yield*/, config_2.getClient().db('vuejx_cfg').collection('vuejx_workflow_action').findOne({
+                                id: actionCode,
+                                workflow: error
+                            })];
                     case 6:
+                        workflowAction = _a.sent();
+                        if (workflowAction['nextVal'] !== undefined && workflowAction['nextVal'] !== null) {
+                            body[workflowAction['field']]['_source']['shortName'] = workflowAction['nextVal']['_source']['shortName'];
+                            body[workflowAction['field']]['_source']['title'] = workflowAction['nextVal']['_source']['title'];
+                        }
+                        return [4 /*yield*/, arrays_1.foundWorkflowRole(user['role'], workflowAction['workflowRole'])];
+                    case 7:
+                        permissProcess = _a.sent();
+                        _a.label = 8;
+                    case 8:
+                        if (!permissProcess) return [3 /*break*/, 10];
+                        return [4 /*yield*/, config_2.getClient().db(db).collection(collection).insertOne(body, opts)];
+                    case 9:
                         insertOne = _a.sent();
                         if (insertOne['insertedCount'] > 0) {
-                            reindex_1.reindex(db, collection, elasticsearch_1.elasticClient, user, body['modifiedAt']);
+                            reindex_1.reindexAPIGraphql(db, collection, elasticsearch_1.elasticClient, body['modifiedAt'], null, 'false');
                             return [2 /*return*/, {
                                     statusCode: 201,
                                     data: {
@@ -151,62 +169,88 @@ var vuejxMutationControl = /** @class */ (function (_super) {
                                     }
                                 }];
                         }
-                        return [3 /*break*/, 8];
-                    case 7:
+                        return [3 /*break*/, 11];
+                    case 10: return [2 /*return*/, permission_utils_1.msg403];
+                    case 11: return [3 /*break*/, 13];
+                    case 12:
                         e_1 = _a.sent();
                         console.error(e_1);
                         return [2 /*return*/, {
                                 statusCode: 500
                             }];
-                    case 8:
+                    case 13:
                         ;
-                        return [3 /*break*/, 10];
-                    case 9: return [2 /*return*/, error];
-                    case 10: return [2 /*return*/];
+                        return [3 /*break*/, 15];
+                    case 14: return [2 /*return*/, error];
+                    case 15: return [2 /*return*/];
                 }
             });
         });
     };
-    vuejxMutationControl.prototype.createMany = function (token, db, collection, body) {
+    vuejxMutationControl.prototype.createMany = function (token, db, collection, body, opts, actionCode) {
         return __awaiter(this, void 0, void 0, function () {
-            var user, error, errorES, _a, _b, _i, key, insertMany, e_2;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
+            var user, error, errorES, _a, _b, _i, key, permissProcess, workflowAction, _c, body_1, bodyEl, insertMany, e_2;
+            return __generator(this, function (_d) {
+                switch (_d.label) {
                     case 0: return [4 /*yield*/, this.defaultBody(token, body, collection, true)];
                     case 1:
-                        user = _c.sent();
+                        user = _d.sent();
                         return [4 /*yield*/, permission_utils_1.permissionPOST(this.path, user, db, collection, body)];
                     case 2:
-                        error = _c.sent();
+                        error = _d.sent();
                         return [4 /*yield*/, permission_es_1.permissionESPOST(this.path, user, db, collection, body, config_2.getClient(), elasticsearch_1.elasticClient)];
                     case 3:
-                        errorES = _c.sent();
-                        if (!(error === null && errorES === null)) return [3 /*break*/, 11];
+                        errorES = _d.sent();
+                        if (!((error === null || typeof error === 'string') && errorES === null)) return [3 /*break*/, 16];
                         _a = [];
                         for (_b in body)
                             _a.push(_b);
                         _i = 0;
-                        _c.label = 4;
+                        _d.label = 4;
                     case 4:
                         if (!(_i < _a.length)) return [3 /*break*/, 7];
                         key = _a[_i];
                         return [4 /*yield*/, arrays_1.verifyBody(body[key])];
                     case 5:
-                        _c.sent();
-                        if (body[key]['shortName'] == undefined || body[key]['shortName'] == null || body[key]['shortName'] == '') {
+                        _d.sent();
+                        if ((body[key]['shortName'] == undefined || body[key]['shortName'] == null || body[key]['shortName'] == '') &&
+                            typeof body[key] === 'object') {
                             body[key]['shortName'] = new ObjectId();
                         }
-                        _c.label = 6;
+                        _d.label = 6;
                     case 6:
                         _i++;
                         return [3 /*break*/, 4];
                     case 7:
-                        _c.trys.push([7, 9, , 10]);
-                        return [4 /*yield*/, config_2.getClient().db(db).collection(collection).insertMany(body)];
+                        _d.trys.push([7, 14, , 15]);
+                        permissProcess = true;
+                        if (!(typeof error === 'string')) return [3 /*break*/, 10];
+                        return [4 /*yield*/, config_2.getClient().db('vuejx_cfg').collection('vuejx_workflow_action').findOne({
+                                id: actionCode,
+                                workflow: error
+                            })];
                     case 8:
-                        insertMany = _c.sent();
+                        workflowAction = _d.sent();
+                        if (body !== undefined && Array.isArray(body)) {
+                            for (_c = 0, body_1 = body; _c < body_1.length; _c++) {
+                                bodyEl = body_1[_c];
+                                if (workflowAction['nextVal'] !== undefined && workflowAction['nextVal'] !== null) {
+                                    bodyEl[workflowAction['field']]['_source']['shortName'] = workflowAction['nextVal']['_source']['shortName'];
+                                    bodyEl[workflowAction['field']]['_source']['title'] = workflowAction['nextVal']['_source']['title'];
+                                }
+                            }
+                        }
+                        return [4 /*yield*/, arrays_1.foundWorkflowRole(user['role'], workflowAction['workflowRole'])];
+                    case 9:
+                        permissProcess = _d.sent();
+                        _d.label = 10;
+                    case 10:
+                        if (!permissProcess) return [3 /*break*/, 12];
+                        return [4 /*yield*/, config_2.getClient().db(db).collection(collection).insertMany(body, opts)];
+                    case 11:
+                        insertMany = _d.sent();
                         if (insertMany['insertedCount'] > 0) {
-                            reindex_1.reindex(db, collection, elasticsearch_1.elasticClient, user, body['modifiedAt']);
+                            reindex_1.reindexAPIGraphql(db, collection, elasticsearch_1.elasticClient, body['modifiedAt'], null, 'false');
                             return [2 /*return*/, {
                                     statusCode: 201,
                                     data: {
@@ -214,25 +258,27 @@ var vuejxMutationControl = /** @class */ (function (_super) {
                                     }
                                 }];
                         }
-                        return [3 /*break*/, 10];
-                    case 9:
-                        e_2 = _c.sent();
+                        return [3 /*break*/, 13];
+                    case 12: return [2 /*return*/, permission_utils_1.msg403];
+                    case 13: return [3 /*break*/, 15];
+                    case 14:
+                        e_2 = _d.sent();
                         console.error(e_2);
                         return [2 /*return*/, {
                                 statusCode: 500
                             }];
-                    case 10:
+                    case 15:
                         ;
-                        return [3 /*break*/, 12];
-                    case 11: return [2 /*return*/, error];
-                    case 12: return [2 /*return*/];
+                        return [3 /*break*/, 17];
+                    case 16: return [2 /*return*/, error];
+                    case 17: return [2 /*return*/];
                 }
             });
         });
     };
-    vuejxMutationControl.prototype.updateById = function (token, db, collection, body) {
+    vuejxMutationControl.prototype.updateById = function (token, db, collection, body, opts, actionCode) {
         return __awaiter(this, void 0, void 0, function () {
-            var user, findOneQuery, detail, error, updateOne, e_3;
+            var user, findOneQuery, detail, error, permissProcess, workflowAction, updateOne, e_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.defaultBody(token, body, collection, false)];
@@ -256,19 +302,38 @@ var vuejxMutationControl = /** @class */ (function (_super) {
                         return [4 /*yield*/, permission_utils_1.permissionPUT(this.path, user, db, collection, body, detail)];
                     case 3:
                         error = _a.sent();
-                        if (!(error === null)) return [3 /*break*/, 9];
+                        if (!(error === null || typeof error === 'string')) return [3 /*break*/, 14];
                         return [4 /*yield*/, arrays_1.verifyBody(body)];
                     case 4:
                         _a.sent();
                         _a.label = 5;
                     case 5:
-                        _a.trys.push([5, 7, , 8]);
-                        delete body['_id'];
-                        return [4 /*yield*/, config_2.getClient().db(db).collection(collection).updateOne({ _id: new ObjectId(detail[0]['_id']) }, { $set: body })];
+                        _a.trys.push([5, 12, , 13]);
+                        permissProcess = true;
+                        if (!(typeof error === 'string')) return [3 /*break*/, 8];
+                        return [4 /*yield*/, config_2.getClient().db('vuejx_cfg').collection('vuejx_workflow_action').findOne({
+                                id: actionCode,
+                                workflow: error
+                            })];
                     case 6:
+                        workflowAction = _a.sent();
+                        if (!(workflowAction !== undefined && workflowAction !== null)) return [3 /*break*/, 8];
+                        if (workflowAction['nextVal'] !== undefined && workflowAction['nextVal'] !== null) {
+                            body[workflowAction['field']]['_source']['shortName'] = workflowAction['nextVal']['_source']['shortName'];
+                            body[workflowAction['field']]['_source']['title'] = workflowAction['nextVal']['_source']['title'];
+                        }
+                        return [4 /*yield*/, arrays_1.foundWorkflowRole(user['role'], workflowAction['workflowRole'])];
+                    case 7:
+                        permissProcess = _a.sent();
+                        _a.label = 8;
+                    case 8:
+                        if (!permissProcess) return [3 /*break*/, 10];
+                        delete body['_id'];
+                        return [4 /*yield*/, config_2.getClient().db(db).collection(collection).updateOne({ _id: new ObjectId(detail[0]['_id']) }, { $set: body }, opts)];
+                    case 9:
                         updateOne = _a.sent();
                         if (updateOne['modifiedCount'] > 0) {
-                            reindex_1.reindex(db, collection, elasticsearch_1.elasticClient, user, body['modifiedAt']);
+                            reindex_1.reindexAPIGraphql(db, collection, elasticsearch_1.elasticClient, body['modifiedAt'], null, 'false');
                             return [2 /*return*/, {
                                     statusCode: 200,
                                     data: {
@@ -279,25 +344,27 @@ var vuejxMutationControl = /** @class */ (function (_super) {
                                     }
                                 }];
                         }
-                        return [3 /*break*/, 8];
-                    case 7:
+                        return [3 /*break*/, 11];
+                    case 10: return [2 /*return*/, permission_utils_1.msg403];
+                    case 11: return [3 /*break*/, 13];
+                    case 12:
                         e_3 = _a.sent();
                         console.error(e_3);
                         return [2 /*return*/, {
                                 statusCode: 500
                             }];
-                    case 8:
+                    case 13:
                         ;
-                        return [3 /*break*/, 10];
-                    case 9: return [2 /*return*/, error];
-                    case 10: return [2 /*return*/];
+                        return [3 /*break*/, 15];
+                    case 14: return [2 /*return*/, error];
+                    case 15: return [2 /*return*/];
                 }
             });
         });
     };
-    vuejxMutationControl.prototype.updateOne = function (token, db, collection, body, filter, sort, skip) {
+    vuejxMutationControl.prototype.updateOne = function (token, db, collection, body, filter, sort, skip, opts, actionCode) {
         return __awaiter(this, void 0, void 0, function () {
-            var user, detail, error, updateOne, e_4;
+            var user, detail, error, permissProcess, workflowAction, updateOne, e_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.defaultBody(token, body, collection, false)];
@@ -323,19 +390,37 @@ var vuejxMutationControl = /** @class */ (function (_super) {
                         return [4 /*yield*/, permission_utils_1.permissionPUT(this.path, user, db, collection, body, detail[0])];
                     case 4:
                         error = _a.sent();
-                        if (!(error === null)) return [3 /*break*/, 10];
+                        if (!(error === null || typeof error === 'string')) return [3 /*break*/, 15];
                         return [4 /*yield*/, arrays_1.verifyBody(body)];
                     case 5:
                         _a.sent();
                         _a.label = 6;
                     case 6:
-                        _a.trys.push([6, 8, , 9]);
-                        delete body['_id'];
-                        return [4 /*yield*/, config_2.getClient().db(db).collection(collection).updateOne({ _id: new ObjectId(detail[0]['_id']) }, { $set: body })];
+                        _a.trys.push([6, 13, , 14]);
+                        permissProcess = true;
+                        if (!(typeof error === 'string')) return [3 /*break*/, 9];
+                        return [4 /*yield*/, config_2.getClient().db('vuejx_cfg').collection('vuejx_workflow_action').findOne({
+                                id: actionCode,
+                                workflow: error
+                            })];
                     case 7:
+                        workflowAction = _a.sent();
+                        if (workflowAction['nextVal'] !== undefined && workflowAction['nextVal'] !== null) {
+                            body[workflowAction['field']]['_source']['shortName'] = workflowAction['nextVal']['_source']['shortName'];
+                            body[workflowAction['field']]['_source']['title'] = workflowAction['nextVal']['_source']['title'];
+                        }
+                        return [4 /*yield*/, arrays_1.foundWorkflowRole(user['role'], workflowAction['workflowRole'])];
+                    case 8:
+                        permissProcess = _a.sent();
+                        _a.label = 9;
+                    case 9:
+                        if (!permissProcess) return [3 /*break*/, 11];
+                        delete body['_id'];
+                        return [4 /*yield*/, config_2.getClient().db(db).collection(collection).updateOne({ _id: new ObjectId(detail[0]['_id']) }, { $set: body }, opts)];
+                    case 10:
                         updateOne = _a.sent();
                         if (updateOne['modifiedCount'] > 0) {
-                            reindex_1.reindex(db, collection, elasticsearch_1.elasticClient, user, body['modifiedAt']);
+                            reindex_1.reindexAPIGraphql(db, collection, elasticsearch_1.elasticClient, body['modifiedAt'], null, 'false');
                             return [2 /*return*/, {
                                     statusCode: 200,
                                     data: {
@@ -346,28 +431,34 @@ var vuejxMutationControl = /** @class */ (function (_super) {
                                     }
                                 }];
                         }
-                        return [3 /*break*/, 9];
-                    case 8:
+                        return [3 /*break*/, 12];
+                    case 11: return [2 /*return*/, permission_utils_1.msg403];
+                    case 12: return [3 /*break*/, 14];
+                    case 13:
                         e_4 = _a.sent();
                         console.error(e_4);
                         return [2 /*return*/, {
                                 statusCode: 500
                             }];
-                    case 9:
+                    case 14:
                         ;
-                        return [3 /*break*/, 11];
-                    case 10: return [2 /*return*/, error];
-                    case 11: return [2 /*return*/];
+                        return [3 /*break*/, 16];
+                    case 15: return [2 /*return*/, error];
+                    case 16: return [2 /*return*/];
                 }
             });
         });
     };
-    vuejxMutationControl.prototype.updateMany = function (token, db, collection, body, filter, sort, skip, limit) {
+    vuejxMutationControl.prototype.updateMany = function (token, db, collection, body, filter, sort, skip, limit, opts, actionCode) {
         return __awaiter(this, void 0, void 0, function () {
-            var user, detail, error, errorCount, ids, key, updateMany, e_5;
+            var user, detail, error, errorCount, ids, errorWorkflow, key, permissProcess, workflowAction, updateMany, e_5;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.defaultBody(token, body, collection, false)];
+                    case 0:
+                        if (body === undefined || body === null) {
+                            body = {};
+                        }
+                        return [4 /*yield*/, this.defaultBody(token, body, collection, false)];
                     case 1:
                         user = _a.sent();
                         return [4 /*yield*/, permission_utils_1.queryBuilder(this.path, user, db, collection, body, filter, {})];
@@ -393,6 +484,7 @@ var vuejxMutationControl = /** @class */ (function (_super) {
                         error = null;
                         errorCount = 0;
                         ids = [];
+                        errorWorkflow = '';
                         key = 0;
                         _a.label = 4;
                     case 4:
@@ -402,7 +494,10 @@ var vuejxMutationControl = /** @class */ (function (_super) {
                     case 5:
                         error = _a.sent();
                         ids.push(detail[key]['_id']);
-                        if (error !== null) {
+                        if (typeof error === 'string') {
+                            errorWorkflow = error;
+                        }
+                        if (error !== null && typeof error !== 'string') {
                             errorCount = 1;
                             return [3 /*break*/, 7];
                         }
@@ -411,24 +506,47 @@ var vuejxMutationControl = /** @class */ (function (_super) {
                         key++;
                         return [3 /*break*/, 4];
                     case 7:
-                        if (!(errorCount === 0)) return [3 /*break*/, 13];
+                        if (!(errorCount === 0)) return [3 /*break*/, 18];
                         return [4 /*yield*/, arrays_1.verifyBody(body)];
                     case 8:
                         _a.sent();
                         _a.label = 9;
                     case 9:
-                        _a.trys.push([9, 11, , 12]);
+                        _a.trys.push([9, 16, , 17]);
+                        permissProcess = true;
+                        if (!(errorWorkflow !== '')) return [3 /*break*/, 12];
+                        return [4 /*yield*/, config_2.getClient().db('vuejx_cfg').collection('vuejx_workflow_action').findOne({
+                                id: actionCode,
+                                workflow: errorWorkflow
+                            })];
+                    case 10:
+                        workflowAction = _a.sent();
+                        body = {};
+                        if (workflowAction['nextVal'] !== undefined && workflowAction['nextVal'] !== null) {
+                            body[workflowAction['field']] = {
+                                _source: {
+                                    shortName: workflowAction['nextVal']['_source']['shortName'],
+                                    title: workflowAction['nextVal']['_source']['title']
+                                }
+                            };
+                        }
+                        return [4 /*yield*/, arrays_1.foundWorkflowRole(user['role'], workflowAction['workflowRole'])];
+                    case 11:
+                        permissProcess = _a.sent();
+                        _a.label = 12;
+                    case 12:
+                        if (!permissProcess) return [3 /*break*/, 14];
                         return [4 /*yield*/, config_2.getClient().db(db).collection(collection).updateMany({
                                 _id: {
                                     $in: ids
                                 }
                             }, {
                                 $set: body
-                            })];
-                    case 10:
+                            }, opts)];
+                    case 13:
                         updateMany = _a.sent();
                         if (updateMany['modifiedCount'] > 0) {
-                            reindex_1.reindex(db, collection, elasticsearch_1.elasticClient, user, body['modifiedAt']);
+                            reindex_1.reindexAPIGraphql(db, collection, elasticsearch_1.elasticClient, body['modifiedAt'], null, 'false');
                             return [2 /*return*/, {
                                     statusCode: 200,
                                     data: {
@@ -439,23 +557,25 @@ var vuejxMutationControl = /** @class */ (function (_super) {
                                     }
                                 }];
                         }
-                        return [3 /*break*/, 12];
-                    case 11:
+                        return [3 /*break*/, 15];
+                    case 14: return [2 /*return*/, permission_utils_1.msg403];
+                    case 15: return [3 /*break*/, 17];
+                    case 16:
                         e_5 = _a.sent();
                         console.error(e_5);
                         return [2 /*return*/, {
                                 statusCode: 500
                             }];
-                    case 12:
+                    case 17:
                         ;
-                        return [3 /*break*/, 14];
-                    case 13: return [2 /*return*/, error];
-                    case 14: return [2 /*return*/];
+                        return [3 /*break*/, 19];
+                    case 18: return [2 /*return*/, error];
+                    case 19: return [2 /*return*/];
                 }
             });
         });
     };
-    vuejxMutationControl.prototype.removeById = function (token, db, collection, id) {
+    vuejxMutationControl.prototype.removeById = function (token, db, collection, id, opts, actionCode) {
         return __awaiter(this, void 0, void 0, function () {
             var user, findOneQuery, detail, error, errorES, removeById, e_6;
             return __generator(this, function (_a) {
@@ -492,7 +612,7 @@ var vuejxMutationControl = /** @class */ (function (_super) {
                         _a.label = 6;
                     case 6:
                         _a.trys.push([6, 8, , 9]);
-                        return [4 /*yield*/, config_2.getClient().db(db).collection(collection).remove({ _id: new ObjectId(id) })];
+                        return [4 /*yield*/, config_2.getClient().db(db).collection(collection).remove({ _id: new ObjectId(id) }, opts)];
                     case 7:
                         removeById = _a.sent();
                         if (removeById['result']['ok'] > 0) {
@@ -517,7 +637,7 @@ var vuejxMutationControl = /** @class */ (function (_super) {
             });
         });
     };
-    vuejxMutationControl.prototype.removeOne = function (token, db, collection, filter, sort) {
+    vuejxMutationControl.prototype.removeOne = function (token, db, collection, filter, sort, opts, actionCode) {
         return __awaiter(this, void 0, void 0, function () {
             var user, detail, error, errorES, removeById, e_7;
             return __generator(this, function (_a) {
@@ -547,7 +667,7 @@ var vuejxMutationControl = /** @class */ (function (_super) {
                         _a.label = 6;
                     case 6:
                         _a.trys.push([6, 8, , 9]);
-                        return [4 /*yield*/, config_2.getClient().db(db).collection(collection).remove({ _id: new ObjectId(detail[0]['_id']) })];
+                        return [4 /*yield*/, config_2.getClient().db(db).collection(collection).remove({ _id: new ObjectId(detail[0]['_id']) }, opts)];
                     case 7:
                         removeById = _a.sent();
                         if (removeById['result']['ok'] > 0) {
@@ -572,7 +692,7 @@ var vuejxMutationControl = /** @class */ (function (_super) {
             });
         });
     };
-    vuejxMutationControl.prototype.removeMany = function (token, db, collection, filter) {
+    vuejxMutationControl.prototype.removeMany = function (token, db, collection, filter, opts, actionCode) {
         return __awaiter(this, void 0, void 0, function () {
             var user, detail, error, errorCount, key, errorES, removeMany, key, e_8;
             return __generator(this, function (_a) {
@@ -617,7 +737,7 @@ var vuejxMutationControl = /** @class */ (function (_super) {
                         _a.label = 9;
                     case 9:
                         _a.trys.push([9, 11, , 12]);
-                        return [4 /*yield*/, config_2.getClient().db(db).collection(collection).remove(filter)];
+                        return [4 /*yield*/, config_2.getClient().db(db).collection(collection).remove(filter, opts)];
                     case 10:
                         removeMany = _a.sent();
                         if (removeMany['result']['ok'] > 0) {
@@ -659,12 +779,28 @@ var vuejxMutationControl = /** @class */ (function (_super) {
                         if (_a.sent()) {
                             if (all === 'true') {
                                 config_2.getClient().db('vuejx_cfg').collection('vuejx_collection').find().limit(1000).toArray(function (err, items) {
-                                    for (var _i = 0, items_1 = items; _i < items_1.length; _i++) {
-                                        var el = items_1[_i];
-                                        if (el['storeDb'] !== undefined && el['storeDb'] !== null && el['storeDb'] !== '') {
-                                            reindex_1.reindexStartUpGraphql(el['storeDb'], el['shortName'], elasticsearch_1.elasticClient, from, until);
-                                        }
-                                    }
+                                    return __awaiter(this, void 0, void 0, function () {
+                                        var _i, items_1, el;
+                                        return __generator(this, function (_a) {
+                                            switch (_a.label) {
+                                                case 0:
+                                                    _i = 0, items_1 = items;
+                                                    _a.label = 1;
+                                                case 1:
+                                                    if (!(_i < items_1.length)) return [3 /*break*/, 4];
+                                                    el = items_1[_i];
+                                                    if (!(el['storeDb'] !== undefined && el['storeDb'] !== null && el['storeDb'] !== '')) return [3 /*break*/, 3];
+                                                    return [4 /*yield*/, reindex_1.reindexAPIGraphql(db, collection, elasticsearch_1.elasticClient, null, null, type)];
+                                                case 2:
+                                                    _a.sent();
+                                                    _a.label = 3;
+                                                case 3:
+                                                    _i++;
+                                                    return [3 /*break*/, 1];
+                                                case 4: return [2 /*return*/];
+                                            }
+                                        });
+                                    });
                                 });
                             }
                             else {
@@ -702,6 +838,84 @@ var vuejxMutationControl = /** @class */ (function (_super) {
                             }
                         });
                     })];
+            });
+        });
+    };
+    vuejxMutationControl.prototype.transaction = function (token, body) {
+        return __awaiter(this, void 0, void 0, function () {
+            var session, opts, _a, _b, _i, key, userUpdateByIdRP, userRemoveManyRP, userCreateManyRP, error_1;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        session = config_2.getClient().startSession();
+                        session.startTransaction();
+                        _c.label = 1;
+                    case 1:
+                        _c.trys.push([1, 14, , 16]);
+                        opts = { session: session, returnOriginal: false };
+                        _a = [];
+                        for (_b in body)
+                            _a.push(_b);
+                        _i = 0;
+                        _c.label = 2;
+                    case 2:
+                        if (!(_i < _a.length)) return [3 /*break*/, 12];
+                        key = _a[_i];
+                        if (!(key === 'userUpdateById')) return [3 /*break*/, 5];
+                        return [4 /*yield*/, this.updateById(token, body[key].db, body[key].collection, body[key].body, opts, body[key].actionCode)];
+                    case 3:
+                        userUpdateByIdRP = _c.sent();
+                        console.log('userUpdateByIdRPuserUpdateByIdRPuserUpdateByIdRP', userUpdateByIdRP);
+                        if (!(userUpdateByIdRP === undefined || userUpdateByIdRP['statusCode'] === 500)) return [3 /*break*/, 5];
+                        return [4 /*yield*/, session.abortTransaction()];
+                    case 4:
+                        _c.sent();
+                        session.endSession();
+                        _c.label = 5;
+                    case 5:
+                        if (!(key === 'userRemoveMany')) return [3 /*break*/, 8];
+                        return [4 /*yield*/, this.removeMany(token, body[key].db, body[key].collection, body[key].filter, opts, body[key].actionCode)];
+                    case 6:
+                        userRemoveManyRP = _c.sent();
+                        console.log('userRemoveManyRPuserRemoveManyRPuserRemoveManyRP', userRemoveManyRP);
+                        if (!(userRemoveManyRP === undefined || userRemoveManyRP['statusCode'] === 500)) return [3 /*break*/, 8];
+                        return [4 /*yield*/, session.abortTransaction()];
+                    case 7:
+                        _c.sent();
+                        session.endSession();
+                        _c.label = 8;
+                    case 8:
+                        if (!(key === 'userCreateMany')) return [3 /*break*/, 11];
+                        return [4 /*yield*/, this.createMany(token, body[key].db, body[key].collection, body[key].body, opts, body[key].actionCode)];
+                    case 9:
+                        userCreateManyRP = _c.sent();
+                        console.log('userCreateManyuserCreateManyuserCreateManyuserCreateMany', userCreateManyRP);
+                        if (!(userCreateManyRP === undefined || userCreateManyRP['statusCode'] === 500)) return [3 /*break*/, 11];
+                        return [4 /*yield*/, session.abortTransaction()];
+                    case 10:
+                        _c.sent();
+                        session.endSession();
+                        _c.label = 11;
+                    case 11:
+                        _i++;
+                        return [3 /*break*/, 2];
+                    case 12: return [4 /*yield*/, session.commitTransaction()];
+                    case 13:
+                        _c.sent();
+                        session.endSession();
+                        return [2 /*return*/, {
+                                status: 200
+                            }];
+                    case 14:
+                        error_1 = _c.sent();
+                        console.error(error_1);
+                        return [4 /*yield*/, session.abortTransaction()];
+                    case 15:
+                        _c.sent();
+                        session.endSession();
+                        return [3 /*break*/, 16];
+                    case 16: return [2 /*return*/];
+                }
             });
         });
     };

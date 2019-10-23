@@ -283,6 +283,27 @@ schema_1.vuejxES.addResolver({
         });
     }
 });
+schema_1.vuejxES.addResolver({
+    name: 'workflowAction',
+    kind: 'query',
+    type: 'JSON',
+    args: {
+        token: 'String',
+        workflow: 'String',
+        parent: 'String'
+    },
+    resolve: function (_a) {
+        var args = _a.args;
+        return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, api_1.vuejxQueryService.workflowAction(args.token, args.workflow, args.parent)];
+                    case 1: return [2 /*return*/, _b.sent()];
+                }
+            });
+        });
+    }
+});
 graphql_compose_1.schemaComposer.Query.addFields({
     userById: schema_1.vuejxES.getResolver('findById'),
     userByIds: schema_1.vuejxES.getResolver('findByIds'),
@@ -291,7 +312,34 @@ graphql_compose_1.schemaComposer.Query.addFields({
     userTotal: schema_1.vuejxES.getResolver('countTotal'),
     userPagination: schema_1.vuejxES.getResolver('pagination'),
     userDb: schema_1.vuejxES.getResolver('userDb'),
-    userCollection: schema_1.vuejxES.getResolver('userCollection')
+    userCollection: schema_1.vuejxES.getResolver('userCollection'),
+    workflowAction: schema_1.vuejxES.getResolver('workflowAction')
+});
+schema_1.vuejxES.addResolver({
+    name: 'updateUserAccount',
+    kind: 'mutation',
+    type: 'JSON',
+    args: {
+        token: 'String',
+        body: 'JSON'
+    },
+    resolve: function (_a) {
+        var args = _a.args;
+        return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        if (!(args.body['confirmPass'] === args.body['newPass'])) return [3 /*break*/, 2];
+                        return [4 /*yield*/, api_1.accountService.updateUser(args.body)];
+                    case 1: return [2 /*return*/, _b.sent()];
+                    case 2: return [2 /*return*/, {
+                            status: 409,
+                            msg: 'Password and confirm password does not match.'
+                        }];
+                }
+            });
+        });
+    },
 });
 schema_1.vuejxES.addResolver({
     name: 'createOne',
@@ -301,14 +349,15 @@ schema_1.vuejxES.addResolver({
         token: 'String',
         db: 'String',
         collection: 'String',
-        body: 'JSON'
+        body: 'JSON',
+        actionCode: 'String'
     },
     resolve: function (_a) {
         var args = _a.args;
         return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0: return [4 /*yield*/, api_1.vuejxMutationService.createOne(args.token, args.db, args.collection, args.body)];
+                    case 0: return [4 /*yield*/, api_1.vuejxMutationService.createOne(args.token, args.db, args.collection, args.body, {}, args.actionCode)];
                     case 1: return [2 /*return*/, _b.sent()];
                 }
             });
@@ -323,14 +372,15 @@ schema_1.vuejxES.addResolver({
         token: 'String',
         db: 'String',
         collection: 'String',
-        body: 'JSON'
+        body: 'JSON',
+        actionCode: 'String'
     },
     resolve: function (_a) {
         var args = _a.args;
         return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0: return [4 /*yield*/, api_1.vuejxMutationService.createMany(args.token, args.db, args.collection, args.body)];
+                    case 0: return [4 /*yield*/, api_1.vuejxMutationService.createMany(args.token, args.db, args.collection, args.body, {}, args.actionCode)];
                     case 1: return [2 /*return*/, _b.sent()];
                 }
             });
@@ -345,14 +395,15 @@ schema_1.vuejxES.addResolver({
         token: 'String',
         db: 'String',
         collection: 'String',
-        body: 'JSON'
+        body: 'JSON',
+        actionCode: 'String'
     },
     resolve: function (_a) {
         var args = _a.args;
         return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0: return [4 /*yield*/, api_1.vuejxMutationService.updateById(args.token, args.db, args.collection, args.body)];
+                    case 0: return [4 /*yield*/, api_1.vuejxMutationService.updateById(args.token, args.db, args.collection, args.body, {}, args.actionCode)];
                     case 1: return [2 /*return*/, _b.sent()];
                 }
             });
@@ -370,14 +421,15 @@ schema_1.vuejxES.addResolver({
         body: 'JSON',
         filter: 'JSON',
         sort: 'JSON',
-        skip: 'Int'
+        skip: 'Int',
+        actionCode: 'String'
     },
     resolve: function (_a) {
         var args = _a.args;
         return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0: return [4 /*yield*/, api_1.vuejxMutationService.updateOne(args.token, args.db, args.collection, args.body, args.filter, args.sort, args.skip)];
+                    case 0: return [4 /*yield*/, api_1.vuejxMutationService.updateOne(args.token, args.db, args.collection, args.body, args.filter, args.sort, args.skip, {}, args.actionCode)];
                     case 1: return [2 /*return*/, _b.sent()];
                 }
             });
@@ -396,14 +448,15 @@ schema_1.vuejxES.addResolver({
         filter: 'JSON',
         sort: 'JSON',
         skip: 'Int',
-        limit: 'Int'
+        limit: 'Int',
+        actionCode: 'String'
     },
     resolve: function (_a) {
         var args = _a.args;
         return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0: return [4 /*yield*/, api_1.vuejxMutationService.updateMany(args.token, args.db, args.collection, args.body, args.filter, args.sort, args.skip, args.limit)];
+                    case 0: return [4 /*yield*/, api_1.vuejxMutationService.updateMany(args.token, args.db, args.collection, args.body, args.filter, args.sort, args.skip, args.limit, {}, args.actionCode)];
                     case 1: return [2 /*return*/, _b.sent()];
                 }
             });
@@ -425,7 +478,7 @@ schema_1.vuejxES.addResolver({
         return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0: return [4 /*yield*/, api_1.vuejxMutationService.removeById(args.token, args.db, args.collection, args.id)];
+                    case 0: return [4 /*yield*/, api_1.vuejxMutationService.removeById(args.token, args.db, args.collection, args.id, {}, args.actionCode)];
                     case 1: return [2 /*return*/, _b.sent()];
                 }
             });
@@ -448,7 +501,7 @@ schema_1.vuejxES.addResolver({
         return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0: return [4 /*yield*/, api_1.vuejxMutationService.removeOne(args.token, args.db, args.collection, args.filter, args.sort)];
+                    case 0: return [4 /*yield*/, api_1.vuejxMutationService.removeOne(args.token, args.db, args.collection, args.filter, args.sort, {}, args.actionCode)];
                     case 1: return [2 /*return*/, _b.sent()];
                 }
             });
@@ -470,7 +523,7 @@ schema_1.vuejxES.addResolver({
         return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0: return [4 /*yield*/, api_1.vuejxMutationService.removeMany(args.token, args.db, args.collection, args.filter)];
+                    case 0: return [4 /*yield*/, api_1.vuejxMutationService.removeMany(args.token, args.db, args.collection, args.filter, {}, args.actionCode)];
                     case 1: return [2 /*return*/, _b.sent()];
                 }
             });
@@ -502,6 +555,26 @@ schema_1.vuejxES.addResolver({
         });
     },
 });
+schema_1.vuejxES.addResolver({
+    name: 'transaction',
+    kind: 'mutation',
+    type: 'JSON',
+    args: {
+        token: 'String',
+        body: 'JSON'
+    },
+    resolve: function (_a) {
+        var args = _a.args;
+        return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, api_1.vuejxMutationService.transaction(args.token, args.body)];
+                    case 1: return [2 /*return*/, _b.sent()];
+                }
+            });
+        });
+    },
+});
 graphql_compose_1.schemaComposer.Mutation.addFields({
     userCreate: schema_1.vuejxES.getResolver('createOne'),
     userCreateMany: schema_1.vuejxES.getResolver('createMany'),
@@ -512,5 +585,7 @@ graphql_compose_1.schemaComposer.Mutation.addFields({
     userRemoveOne: schema_1.vuejxES.getResolver('removeOne'),
     userRemoveMany: schema_1.vuejxES.getResolver('removeMany'),
     reindex: schema_1.vuejxES.getResolver('reindex'),
+    account: schema_1.vuejxES.getResolver('updateUserAccount'),
+    transaction: schema_1.vuejxES.getResolver('transaction'),
 });
 exports.default = graphql_compose_1.schemaComposer.buildSchema();

@@ -6,8 +6,7 @@ const bluebird = require('bluebird');
 const authRoutes = require('./routes');
 const database = require('./database');
 const cluster = require('cluster');
-const cpuCount = process.env.CLUSTER_NODE; 
-
+const cpuCount = process.env.CLUSTER_NODE;
 global.Promise = bluebird;
 
 database.connect();
@@ -20,22 +19,22 @@ if (cluster.isMaster) {
 
   // Create a worker for each CPU
   for (var i = 0; i < cpuCount; i += 1) {
-      cluster.fork();
+    cluster.fork();
   }
 
   // Listen for dying workers
   cluster.on('exit', function (worker) {
 
-      // Replace the dead worker, we're not sentimental
-      console.log('Worker %d died :(', worker.id);
-      
-      cluster.fork();
+    // Replace the dead worker, we're not sentimental
+    console.log('Worker %d died :(', worker.id);
+
+    cluster.fork();
 
   });
 
-// Code to run if we're in a worker process
+  // Code to run if we're in a worker process
 } else {
-  
+
   const app = express();
 
   app.use(logger('dev'));
