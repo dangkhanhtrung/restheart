@@ -147,7 +147,7 @@ body .v-chip--label {
 body .hd__screen > div {
   max-width: 1366px !important;
   margin: 0 auto;
-  padding: 0;
+  padding: 0 15px;
 }
 
 body .vuejx__header .v-chip.v-size--default {

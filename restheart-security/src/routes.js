@@ -48,7 +48,6 @@ function initialize(app) {
     delete req.user.user['password'];
     res.json(req.user);
   });
-
   /** API path that will upload the files */
   app.post('/upload/:bucket', function (req, res) {
     upload(req, res, function (err) {
@@ -78,6 +77,7 @@ function initialize(app) {
       });
       /** set the proper content type */
       res.set('Content-Type', files[0].contentType)
+      res.set("Cache-Control","max-age=0,must-revalidate");
       /** return response */
       return readstream.pipe(res);
     });
