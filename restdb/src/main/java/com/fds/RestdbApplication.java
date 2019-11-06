@@ -1,9 +1,10 @@
 package com.fds;
 
+import java.text.ParseException;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.ComponentScan;
 
 import com.fds.property.FileStorageProperties;
 
@@ -13,7 +14,7 @@ import com.fds.property.FileStorageProperties;
 })
 public class RestdbApplication {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ParseException {
 		SpringApplication.run(RestdbApplication.class, args);
 	}
 

@@ -17,7 +17,7 @@ public class Not {
 
 	private String site;
 	private String storage;
-	private int openAccess;
+	private String openAccess;
 	private AccessRole[] accessRoles;
 	private AccessRole[] accessUsers;
 	private AccessRole[] accessEmails;
@@ -58,11 +58,11 @@ public class Not {
 		this.storage = storage;
 	}
 
-	public int getOpenAccess() {
+	public String getOpenAccess() {
 		return openAccess;
 	}
 
-	public void setOpenAccess(int openAccess) {
+	public void setOpenAccess(String openAccess) {
 		this.openAccess = openAccess;
 	}
 

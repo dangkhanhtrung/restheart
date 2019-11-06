@@ -5,8 +5,17 @@ public class UploadFileResponse {
     private String fileDownloadUri;
     private String fileType;
     private long size;
+    private String message;
 
-    public String getFileName() {
+    public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public String getFileName() {
 		return fileName;
 	}
 
@@ -38,11 +47,12 @@ public class UploadFileResponse {
 		this.size = size;
 	}
 
-	public UploadFileResponse(String fileName, String fileDownloadUri, String fileType, long size) {
+	public UploadFileResponse(String fileName, String fileDownloadUri, String fileType, long size, String message) {
         this.fileName = fileName;
         this.fileDownloadUri = fileDownloadUri;
         this.fileType = fileType;
         this.size = size;
+        this.message = message;
     }
 
 }

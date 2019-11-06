@@ -19,7 +19,6 @@ public class Tuyen {
 	public void setTen_tuyen(String ten_tuyen) {
 		this.ten_tuyen = ten_tuyen;
 	}
-	private String coquan_ql;
 	private double cu_ly;
 	private int gian_cach;
 	private int ll_quyhoach;
@@ -43,8 +42,14 @@ public class Tuyen {
 	private BenXeSource ben_xe;
 	private LoaiTuyenSource loai_tuyen;
 	private String site;
+	public CoreObjectSource[] getCoquan_ql() {
+		return coquan_ql;
+	}
+	public void setCoquan_ql(CoreObjectSource[] coquan_ql) {
+		this.coquan_ql = coquan_ql;
+	}
 	private String storage;
-	private int openAccess;
+	private String openAccess;
 	private AccessRole[] accessRoles;
 	private AccessRole[] accessUsers;
 	private AccessRole[] accessEmails;
@@ -53,7 +58,43 @@ public class Tuyen {
 
 	private BenXeSource ben_xe_di;
 	private BenXeSource ben_xe_den;
+	private CoreObjectSource pl_quyhoach;
+	private CoreObjectSource noi_di;
+	private CoreObjectSource noi_den;
+	private CoreObjectSource[] coquan_ql;
+	private CoreObjectSource[] review_status;
+	private DoanhNghiepSource[] doanh_nghiep;
 	
+	public DoanhNghiepSource[] getDoanh_nghiep() {
+		return doanh_nghiep;
+	}
+	public void setDoanh_nghiep(DoanhNghiepSource[] doanh_nghiep) {
+		this.doanh_nghiep = doanh_nghiep;
+	}
+	public CoreObjectSource[] getReview_status() {
+		return review_status;
+	}
+	public void setReview_status(CoreObjectSource[] review_status) {
+		this.review_status = review_status;
+	}
+	public CoreObjectSource getNoi_di() {
+		return noi_di;
+	}
+	public void setNoi_di(CoreObjectSource noi_di) {
+		this.noi_di = noi_di;
+	}
+	public CoreObjectSource getNoi_den() {
+		return noi_den;
+	}
+	public void setNoi_den(CoreObjectSource noi_den) {
+		this.noi_den = noi_den;
+	}
+	public CoreObjectSource getPl_quyhoach() {
+		return pl_quyhoach;
+	}
+	public void setPl_quyhoach(CoreObjectSource pl_quyhoach) {
+		this.pl_quyhoach = pl_quyhoach;
+	}
 	private CoreObjectSource status;
 	private String description;
 	
@@ -113,11 +154,11 @@ public class Tuyen {
 		this.storage = storage;
 	}
 
-	public int getOpenAccess() {
+	public String getOpenAccess() {
 		return this.openAccess;
 	}
 
-	public void setOpenAccess(int openAccess) {
+	public void setOpenAccess(String openAccess) {
 		this.openAccess = openAccess;
 	}
 
@@ -210,12 +251,6 @@ public class Tuyen {
 	}
 	public void setMaso_tuyen(String maso_tuyen) {
 		this.maso_tuyen = maso_tuyen;
-	}
-	public String getCoquan_ql() {
-		return coquan_ql;
-	}
-	public void setCoquan_ql(String coquan_ql) {
-		this.coquan_ql = coquan_ql;
 	}
 	public double getCu_ly() {
 		return cu_ly;

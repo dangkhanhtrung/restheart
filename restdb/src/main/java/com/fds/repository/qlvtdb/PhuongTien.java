@@ -19,17 +19,17 @@ public class PhuongTien {
 	private String sokhung;
 	private String somay;
 	private int nam_hetnienhan;
-	private int nam_caitao;
+	private long nam_caitao;
 	private int trongtai;
 	private CoreObjectSource loai_pt;
 	private String nguoi_sohuu;
 	private String ghichu;
-	private int trangthai;
+	private CoreObjectSource status;
 	private CoreObject coquan_ql;
 
 	private String site;
 	private String storage;
-	private int openAccess;
+	private String openAccess;
 	private AccessRole[] accessRoles;
 	private AccessRole[] accessUsers;
 	private AccessRole[] accessEmails;
@@ -72,11 +72,11 @@ public class PhuongTien {
 		this.storage = storage;
 	}
 
-	public int getOpenAccess() {
+	public String getOpenAccess() {
 		return this.openAccess;
 	}
 
-	public void setOpenAccess(int openAccess) {
+	public void setOpenAccess(String openAccess) {
 		this.openAccess = openAccess;
 	}
 
@@ -188,10 +188,10 @@ public class PhuongTien {
 	public void setNam_hetnienhan(int nam_hetnienhan) {
 		this.nam_hetnienhan = nam_hetnienhan;
 	}
-	public int getNam_caitao() {
+	public long getNam_caitao() {
 		return nam_caitao;
 	}
-	public void setNam_caitao(int nam_caitao) {
+	public void setNam_caitao(long nam_caitao) {
 		this.nam_caitao = nam_caitao;
 	}
 	public int getTrongtai() {
@@ -218,12 +218,14 @@ public class PhuongTien {
 	public void setGhichu(String ghichu) {
 		this.ghichu = ghichu;
 	}
-	public int getTrangthai() {
-		return trangthai;
+	public CoreObjectSource getStatus() {
+		return status;
 	}
-	public void setTrangthai(int trangthai) {
-		this.trangthai = trangthai;
+
+	public void setStatus(CoreObjectSource status) {
+		this.status = status;
 	}
+
 	public CoreObject getCoquan_ql() {
 		return coquan_ql;
 	}

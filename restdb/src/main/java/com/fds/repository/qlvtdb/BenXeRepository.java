@@ -14,4 +14,6 @@ public interface BenXeRepository extends MongoRepository<BenXe, String> {
 	@Query("{ 'ma_bx' : '?0', 'so_gtvt': '?1' }")
 	BenXe findByMaBXAndSo(String ma_bx, String soGtvt);
 	
+	@Query("{ 'shortName' : '?0', 'storage': '?1' }")
+	BenXe findByShortNameAndStorage(String shortName, String storage);
 }

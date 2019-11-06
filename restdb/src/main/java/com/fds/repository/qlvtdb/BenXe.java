@@ -19,11 +19,26 @@ public class BenXe {
 	private CoreObject tinh;
 	private CoreObject huyen;
 	private CoreObject xa;
-	private CoreObject coquan_ql;
+	private String coquan_ql;
+	public String getCoquan_ql() {
+		return coquan_ql;
+	}
+
+	public void setCoquan_ql(String coquan_ql) {
+		this.coquan_ql = coquan_ql;
+	}
+
+	public CoreObjectSource getSo_gtvt() {
+		return so_gtvt;
+	}
+
+	public void setSo_gtvt(CoreObjectSource so_gtvt) {
+		this.so_gtvt = so_gtvt;
+	}
 	private int trangthai;
 	private String ghichu;
 
-	private String so_gtvt;
+	private CoreObjectSource so_gtvt;
 	private LoaiBenSource loai_ben;
 	private int sl_xekhach;
 	private int sl_xekhac;
@@ -32,14 +47,6 @@ public class BenXe {
 	private int sl_xuatben;
 	private float dientich;
 	
-	public String getSo_gtvt() {
-		return so_gtvt;
-	}
-
-	public void setSo_gtvt(String so_gtvt) {
-		this.so_gtvt = so_gtvt;
-	}
-
 	public LoaiBenSource getLoai_ben() {
 		return loai_ben;
 	}
@@ -97,7 +104,7 @@ public class BenXe {
 	}
 	private String site;
 	private String storage;
-	private int openAccess;
+	private String openAccess;
 	private AccessRole[] accessRoles;
 	private AccessRole[] accessUsers;
 	private AccessRole[] accessEmails;
@@ -122,11 +129,11 @@ public class BenXe {
 		this.storage = storage;
 	}
 
-	public int getOpenAccess() {
+	public String getOpenAccess() {
 		return this.openAccess;
 	}
 
-	public void setOpenAccess(int openAccess) {
+	public void setOpenAccess(String openAccess) {
 		this.openAccess = openAccess;
 	}
 
@@ -245,12 +252,6 @@ public class BenXe {
 	}
 	public void setXa(CoreObject xa) {
 		this.xa = xa;
-	}
-	public CoreObject getCoquan_ql() {
-		return coquan_ql;
-	}
-	public void setCoquan_ql(CoreObject coquan_ql) {
-		this.coquan_ql = coquan_ql;
 	}
 	public int getTrangthai() {
 		return trangthai;

@@ -12,8 +12,14 @@ import com.fds.repository.qlvtdb.Tuyen;
 
 @Repository
 public interface TuyenRepository extends MongoRepository<Tuyen, String>  {
-    Tuyen findByShortName(String shortName);
+    List<Tuyen> findByShortName(String shortName);
     
     @Query(value = "?0")
     List<Tuyen> findByQuery(Document queryDoc, Sort sortBy);
+
+    @Query(value = "{ 'shortName': ?0, 'storage': ?1 }")
+    Tuyen findByShortNameAndStorage(String shortName, String storage);
+
+    @Query(value = "{ 'shortName': ?0, 'storage': ?1 }")
+    List<Tuyen> findByShortNameDraft(String shortName, String storage);
 }
